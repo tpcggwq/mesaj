@@ -2,6 +2,10 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,34 +18,38 @@
   <div class="gallery">
   <!-- Her resim için ayrı container -->
   <div class="photo-card">
-    <img src="{{ url_for('static', filename='1.jpg') }}" alt="Biz">
+   <img src="https://mesaj-umta.onrender.com/static/images/1.jpg">
     <div class="caption">sana</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='2.jpg') }}" alt="Biz">
+    <img src="https://mesaj-umta.onrender.com/static/images/2.jpg">
     <div class="caption">aşırı</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='3.jpg') }}" alt="Biz">
+   <img src="https://mesaj-umta.onrender.com/static/images/3.jpg">
     <div class="caption">derecede</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='4.jpg') }}" alt="Biz">
+    <img src="https://mesaj-umta.onrender.com/static/images/4.jpg">
     <div class="caption">fena</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='5.jpg') }}" alt="Biz">
-    <div class="caption">derecede</div>
+<img src="https://mesaj-umta.onrender.com/static/images/5.jpg">    
+<div class="caption">şekilde</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='6.jpg') }}" alt="Biz">
+<img src="https://mesaj-umta.onrender.com/static/images/6.jpg">
     <div class="caption">aşık oldum</div>
   </div>
  <div class="photo-card">
-    <img src="{{ url_for('static', filename='7.jpg') }}" alt="Biz">
+   <img src="https://mesaj-umta.onrender.com/static/images/7.jpg">
     <div class="caption">iyi ki varsın bebeğim</div>
   </div>
 
+<body>
+  style="background: url('{{ url_for('static', filename='ia.jpg') }}') no-repeat center center fixed; background-size: cover;">
+
+</body> 
 
 
 
