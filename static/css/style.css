@@ -51,11 +51,7 @@ img {
 }
 
 body {
-    background-image: url('C:/Users/TOPRAK/Desktop/biz/ia.jpg');
-    background-size: cover;  /* Resmi ekrana sığdırır */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;  /* Sabit arka plan */
+  
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
