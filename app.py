@@ -1,13 +1,14 @@
-from flask import Flask
-from views import views
+from flask import Flask, render_template
+import os
 
 app = Flask(__name__)
-app.register_blueprint(views, url_prefix="/")
 
+@app.route('/')
+def home():
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        return f"Error: {str(e)}", 500
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
-    # app.py'ye ekleyin
-@app.route('/ping')
-def ping():
-    return "OK"
+    app.run(host='0.0.0.0', port=5000)
