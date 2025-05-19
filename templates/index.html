@@ -53,3 +53,32 @@
 
 </body>
 </html>
+
+<script>
+  // Uçuşan kalpler
+  function createHearts() {
+    const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
+    for (let i = 0; i < 15; i++) {
+      const heart = document.createElement('div');
+      heart.innerHTML = '❤';
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.top = Math.random() * 100 + 'vh';
+      heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+      heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(heart);
+    }
+  }
+
+  // Fotoğraf büyütme
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('click', function() {
+      this.classList.toggle('zoomed');
+      document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : '';
+    });
+  });
+
+  window.onload = createHearts;
+</script>
+
