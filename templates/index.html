@@ -7,322 +7,235 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Sevgilime Özel</title>
   <style>
-    /* TEMEL STİLLER */
+    /* ORİJİNAL CSS KODU (Aynen Korundu) */
     body {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      width: 100vw;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #121212 0%, #1e1e2f 100%);
-      font-family: "Lucida Console", "Courier New", monospace;
-      color: white;
-      overflow-x: hidden;
-      position: relative;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior-y: contain;
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: rgb(19, 20, 22);
+         font-family: "Lucida Console", "Courier New", monospace;
+        color: white;
+        overflow-x: hidden;
     }
 
     h1 {
-      text-align: center;
-      margin-top: 30px;
-      color: #f37055;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-      position: relative;
-      display: inline-block;
-      padding: 0 20px;
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-    }
-
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: #f37055;
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
-    }
-
-    h1:hover::after {
-      transform: scaleX(1);
+        text-align: center;
+        margin-top: 30px;
+        color: #f37055;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
     p {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      font-size: clamp(1rem, 3vw, 1.125rem);
-      line-height: 1.7;
-      text-align: justify;
-      color: #f0f0f0;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        font-size: 18px;
+        line-height: 1.7;
+        text-align: justify;
+        color: #f0f0f0;
     }
 
-    /* GALERİ STİLLERİ */
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-      padding: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        padding: 30px;
     }
 
     .photo-card {
-      width: 300px;
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      cursor: pointer;
-      position: relative;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
+        width: 300px;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        cursor: pointer;
+        position: relative;
     }
 
     .photo-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
     }
 
     .photo-card img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      display: block;
-      transition: filter 0.3s ease;
-      border-bottom: 1px solid #ddd;
-      content-visibility: auto;
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        transition: filter 0.3s ease;
+        border-bottom: 1px solid #ddd;
     }
 
     .photo-card:hover img {
-      filter: brightness(1.2);
-    }
-
-    .photo-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at center, transparent 30%, rgba(243, 112, 85, 0.2) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-
-    .photo-card:hover::before {
-      opacity: 1;
+        filter: brightness(1.2);
     }
 
     .caption {
-      padding: 15px;
-      text-align: center;
-      font-family: "Lucida Console", "Courier New", monospace;
-      font-weight: 600;
-      font-size: 18px;
-      color: #121212;
-      background: linear-gradient(to right, #f37055, #ff9a8b);
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-      letter-spacing: 1px;
-      position: relative;
-      z-index: 2;
+        padding: 15px;
+        text-align: center;
+        font-family: "Lucida Console", "Courier New", monospace;
+        font-weight: 600;
+        font-size: 18px;
+        color: #ffffff;
+        background: #f9f9f9;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        letter-spacing: 1px;
     }
 
-    /* KALP ANİMASYONU */
-    .heart {
-      position: fixed;
-      pointer-events: none;
-      animation: float 6s ease-in-out infinite;
-      opacity: 0.7;
-      z-index: 9999;
-      user-select: none;
-      will-change: transform, opacity;
-      backface-visibility: hidden;
-      transform: translate3d(0,0,0);
-      font-size: 16px;
+    @media (max-width: 768px) {
+        .photo-card {
+            width: 90%;
+        }
     }
 
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
-      50% { transform: translateY(-20px) rotate(10deg); opacity: 1; }
-      100% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
-    }
-
-    /* BÜYÜTME EFEKTİ */
+    /* YENİ EKLENEN STİLLER */
     .photo-card.zoomed {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(1.8);
       z-index: 1000;
-      width: 80vw;
-      height: 80vh;
+      width: 90vw;
+      height: 90vh;
+      max-width: 800px;
       cursor: zoom-out;
+      animation: zoomIn 0.3s ease-out;
     }
 
-    .photo-card.zoomed img {
+    @keyframes zoomIn {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1.8); }
+    }
+
+    .floating-hearts {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: 100%;
     }
 
-    /* SCROLLBAR */
-    ::-webkit-scrollbar {
-      width: 8px;
+    .floating-hearts .heart {
+      position: absolute;
+      animation: float 6s ease-in-out infinite;
+      font-size: 24px;
     }
 
-    ::-webkit-scrollbar-track {
-      background: #1e1e2f;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #f37055;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #ff9a8b;
-    }
-
-    /* MOBİL UYUM */
-    @media (max-width: 768px) {
-      body {
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-      
-      .photo-card {
-        width: 90%;
-        max-width: 350px;
-      }
-      
-      .photo-card.zoomed {
-        width: 95vw !important;
-        height: 60vh !important;
-        transform: translate(-50%, -50%) scale(1.5) !important;
-      }
-      
-      .heart {
-        font-size: 14px !important;
-        animation: float-mobile 8s ease-in-out infinite;
-      }
-      
-      @keyframes float-mobile {
-        0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
-        100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-      }
-      
-      .caption {
-        font-size: 16px;
-        padding: 10px;
-      }
-      
-      h1 {
-        margin-top: 20px;
-      }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ORİJİNAL METİN İÇERİĞİ (Aynen Korundu) -->
   <h1>SELAM AŞKIM</h1>
 
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya "yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur." Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
 
   <div class="gallery">
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1201.jpg?raw=true" alt="IMG_1201" loading="lazy" decoding="async">
       <div class="caption">sana</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1225.jpeg?raw=true" alt="IMG_1225" loading="lazy" decoding="async">
       <div class="caption">aşırı</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1325.jpeg?raw=true" alt="IMG_1325" loading="lazy" decoding="async">
       <div class="caption">sana</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1849.jpeg?raw=true" alt="IMG_1849" loading="lazy" decoding="async">
       <div class="caption">fena</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1924.jpeg?raw=true" alt="IMG_1924" loading="lazy" decoding="async">
       <div class="caption">şekilde</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1928.jpeg?raw=true" alt="IMG_1928" loading="lazy" decoding="async">
       <div class="caption">aşık oldum</div>
     </div>
-    <div class="photo-card">
+    <div class="photo-card" data-zoomable>
       <img src="https://github.com/tpcggwq/mesaj/blob/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg?raw=true" alt="final" loading="lazy" decoding="async">
       <div class="caption">iyi ki varsın bebeğim</div>
     </div>
   </div>
 
   <script>
+    // Orijinal JavaScript kodunuz (Aynen korundu)
+    function createHearts() {
+      const isMobile = window.innerWidth <= 768;
+      const heartCount = isMobile ? 8 : 15;
+      const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
+      
+      document.querySelectorAll('.heart').forEach(heart => heart.remove());
+      
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤';
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = Math.random() * 100 + 'vh';
+        heart.style.fontSize = (Math.random() * (isMobile ? 10 : 20) + 8) + 'px';
+        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heart.style.willChange = 'transform, opacity';
+        document.body.appendChild(heart);
+      }
+    }
+
+    // YENİ EKLENEN JAVASCRIPT
     document.addEventListener('DOMContentLoaded', function() {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  let currentZoomedCard = null;
+      // Orijinal kalp fonksiyonu
+      createHearts();
+      window.addEventListener('resize', createHearts);
 
-  // Fotoğraf büyütme fonksiyonu
-  function handleCardClick(card) {
-    if (currentZoomedCard) {
-      currentZoomedCard.classList.remove('zoomed');
-      document.body.style.overflow = 'auto';
-      if (isIOS) document.body.style.position = 'relative';
-      currentZoomedCard = null;
-      return;
-    }
+      // Yeni fotoğraf büyütme özelliği
+      const zoomableCards = document.querySelectorAll('[data-zoomable]');
+      let currentZoomedCard = null;
 
-    card.classList.add('zoomed');
-    document.body.style.overflow = 'hidden';
-    if (isIOS) {
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${window.scrollY}px`;
-    }
-    currentZoomedCard = card;
-  }
+      function toggleZoom(card) {
+        if (currentZoomedCard) {
+          currentZoomedCard.classList.remove('zoomed');
+          document.body.style.overflow = 'auto';
+          currentZoomedCard = null;
+        } else {
+          card.classList.add('zoomed');
+          document.body.style.overflow = 'hidden';
+          currentZoomedCard = card;
+        }
+      }
 
-  // Tıklama event listener'ları
-  document.querySelectorAll('.photo-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-      e.stopPropagation();
-      handleCardClick(this);
+      zoomableCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleZoom(this);
+        });
+      });
+
+      // Dışarı tıklayarak kapatma
+      document.addEventListener('click', function(e) {
+        if (currentZoomedCard && !currentZoomedCard.contains(e.target)) {
+          toggleZoom(currentZoomedCard);
+        }
+      });
+
+      // ESC tuşu ile kapatma
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && currentZoomedCard) {
+          toggleZoom(currentZoomedCard);
+        }
+      });
     });
-  });
-
-  // Document click (küçültme için)
-  document.addEventListener('click', function(e) {
-    if (currentZoomedCard && !currentZoomedCard.contains(e.target)) {
-      currentZoomedCard.classList.remove('zoomed');
-      document.body.style.overflow = 'auto';
-      if (isIOS) {
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-      currentZoomedCard = null;
-    }
-  });
-
-  // ESC tuşu desteği
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && currentZoomedCard) {
-      currentZoomedCard.classList.remove('zoomed');
-      document.body.style.overflow = 'auto';
-      if (isIOS) {
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-      currentZoomedCard = null;
-    }
-  });
-});
   </script>
 </body>
 </html>
