@@ -1,12 +1,16 @@
+/* Base Styles */
 body {
     height: 100vh;
     width: 100vw;
     margin: 0;
     padding: 0;
-    background-color: rgb(19, 20, 22);
+    background: linear-gradient(135deg, #121212 0%, #1e1e2f 100%);
     font-family: "Lucida Console", "Courier New", monospace;
     color: white;
     overflow-x: hidden;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
 }
 
 h1 {
@@ -14,138 +18,6 @@ h1 {
     margin-top: 30px;
     color: #f37055;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-p {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 0 20px;
-    font-size: 18px;
-    line-height: 1.7;
-    text-align: justify;
-    color: #f0f0f0;
-}
-
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: center;
-    padding: 30px;
-}
-
-.photo-card {
-    width: 300px;
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    cursor: pointer;
-    position: relative;
-}
-
-.photo-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-}
-
-.photo-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    display: block;
-    transition: filter 0.3s ease;
-    border-bottom: 1px solid #ddd;
-}
-
-.photo-card:hover img {
-    filter: brightness(1.2);
-}
-
-.caption {
-    padding: 15px;
-    text-align: center;
-    font-family: "Lucida Console", "Courier New", monospace;
-    font-weight: 600;
-    font-size: 18px;
-    color: #ffffff;
-    background: #f9f9f9;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    letter-spacing: 1px;
-}
-
-@media (max-width: 768px) {
-    .photo-card {
-        width: 90%;
-    }
-}
-
-
-
-body {
-    background: linear-gradient(135deg, #121212 0%, #1e1e2f 100%);
-    position: relative;
-}
-
-.heart {
-    position: absolute;
-    pointer-events: none;
-    animation: float 6s ease-in-out infinite;
-    opacity: 0.7;
-}
-
-@keyframes float {
-    0% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(10deg); }
-    100% { transform: translateY(0) rotate(0deg); }
-}
-
-
-.photo-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, transparent 30%, rgba(243, 112, 85, 0.2) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-}
-
-.photo-card:hover::before {
-    opacity: 1;
-}
-
-.caption {
-    background: linear-gradient(to right, #f37055, #ff9a8b);
-    color: #121212;
-    position: relative;
-    z-index: 2;
-}
-
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #1e1e2f;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #f37055;
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #ff9a8b;
-}
-
-
-h1 {
     position: relative;
     display: inline-block;
     padding: 0 20px;
@@ -167,7 +39,106 @@ h1:hover::after {
     transform: scaleX(1);
 }
 
+p {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: justify;
+    color: #f0f0f0;
+}
 
+/* Gallery Styles */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 30px;
+}
+
+.photo-card {
+    width: 300px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    touch-action: manipulation;
+}
+
+.photo-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s ease;
+    border-bottom: 1px solid #ddd;
+}
+
+.photo-card:hover img {
+    filter: brightness(1.2);
+}
+
+.photo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(243, 112, 85, 0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.photo-card:hover::before {
+    opacity: 1;
+}
+
+.caption {
+    padding: 15px;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-weight: 600;
+    font-size: 18px;
+    color: #121212;
+    background: linear-gradient(to right, #f37055, #ff9a8b);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Heart Animation */
+.heart {
+    position: fixed;
+    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.7;
+    z-index: 9999;
+    user-select: none;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    font-size: 16px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-20px) rotate(10deg); opacity: 1; }
+    100% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+}
+
+/* Zoom Effect */
 .photo-card.zoomed {
     position: fixed;
     top: 50%;
@@ -183,8 +154,51 @@ h1:hover::after {
     height: 100%;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
 
+::-webkit-scrollbar-track {
+    background: #1e1e2f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #f37055;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff9a8b;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
+    body {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .photo-card {
+        width: 90%;
+        max-width: 350px;
+    }
+    
+    .photo-card.zoomed {
+        width: 95vw !important;
+        height: 50vh !important;
+        transform: translate(-50%, -50%) scale(1.5) !important;
+    }
+    
+    .heart {
+        font-size: 12px !important;
+        animation: float-mobile 8s ease-in-out infinite;
+    }
+    
+    @keyframes float-mobile {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+        100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    
     .caption {
         font-size: 16px;
         padding: 10px;
@@ -195,71 +209,8 @@ h1:hover::after {
         margin-top: 20px;
     }
     
-    .photo-card.zoomed {
-        width: 95vw;
-        height: 60vh;
+    p {
+        font-size: 16px;
+        padding: 0 15px;
     }
-}
-/* Kalpler için responsive ayar */
-.heart {
-  position: absolute;
-  pointer-events: none;
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.7;
-  /* Mobilde boyut küçültme */
-  font-size: 16px !important; 
-}
-
-/* Mobilde daha az kalp */
-@media (max-width: 768px) {
-  .heart {
-    font-size: 12px !important;
-    animation-duration: 8s;
-  }
-}
-
-/* Performans için donanım hızlandırma */
-@keyframes float {
-  0% { 
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.7;
-  }
-  50% { 
-    transform: translateY(-20px) rotate(10deg);
-    opacity: 1;
-  }
-  100% { 
-    transform: translateY(-40px) rotate(0deg);
-    opacity: 0;
-  }
-}
-/* MOBİL ÖZEL AYARLAR */
-@media (max-width: 768px) {
-  body {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  
-  .photo-card {
-    width: 100%;
-    max-width: 350px;
-    margin: 0 auto;
-  }
-  
-  .photo-card.zoomed {
-    width: 95vw !important;
-    height: 50vh !important;
-    transform: translate(-50%, -50%) scale(1.5) !important;
-  }
-  
-  .heart {
-    font-size: 14px !important;
-    animation: float-mobile 8s ease-in-out infinite;
-  }
-  
-  @keyframes float-mobile {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
-    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-  }
 }
