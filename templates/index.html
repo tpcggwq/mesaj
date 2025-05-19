@@ -263,72 +263,66 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Cihaz tespiti
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isAndroid = /Android/.test(navigator.userAgent);
-      const isMobile = isIOS || isAndroid || window.innerWidth <= 768;
-      
-      // Kalp oluşturma
-      function createHearts() {
-        const heartCount = isMobile ? 5 : 10;
-        const existingHearts = document.querySelectorAll('.heart');
-        
-        // Performans için fazla kalpleri temizle
-        if(existingHearts.length > heartCount * 2) {
-          existingHearts.forEach((heart, index) => {
-            if(index > heartCount) heart.remove();
-          });
-          return;
-        }
-        
-        // Yeni kalpler
-        const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3'];
-        const fragment = document.createDocumentFragment();
-        
-        for(let i = 0; i < heartCount; i++) {
-          const heart = document.createElement('div');
-          heart.className = 'heart';
-          heart.innerHTML = '❤';
-          heart.style.cssText = `
-            left: ${Math.random() * 100}vw;
-            top: ${Math.random() * 100}vh;
-            font-size: ${isMobile ? '14px' : '16px'};
-            color: ${colors[Math.floor(Math.random() * colors.length)]};
-            animation-delay: ${Math.random() * 2}s;
-          `;
-          fragment.appendChild(heart);
-        }
-        document.body.appendChild(fragment);
-      }
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  let currentZoomedCard = null;
 
-      // Fotoğraf büyütme
-      document.querySelectorAll('.photo-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-          if(isIOS) e.preventDefault();
-          this.classList.toggle('zoomed');
-          document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : 'auto';
-          
-          // iOS özel ayar
-          if(isIOS) {
-            document.body.style.position = this.classList.contains('zoomed') ? 'fixed' : 'relative';
-          }
-        }, { passive: true });
-      });
+  // Fotoğraf büyütme fonksiyonu
+  function handleCardClick(card) {
+    if (currentZoomedCard) {
+      currentZoomedCard.classList.remove('zoomed');
+      document.body.style.overflow = 'auto';
+      if (isIOS) document.body.style.position = 'relative';
+      currentZoomedCard = null;
+      return;
+    }
 
-      // İlk yükleme ve resize
-      createHearts();
-      
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(createHearts, 200);
-      });
+    card.classList.add('zoomed');
+    document.body.style.overflow = 'hidden';
+    if (isIOS) {
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
+    }
+    currentZoomedCard = card;
+  }
 
-      // iOS için ekstra optimizasyon
-      if(isIOS) {
-        document.body.style.webkitTransform = 'translate3d(0,0,0)';
-      }
+  // Tıklama event listener'ları
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      e.stopPropagation();
+      handleCardClick(this);
     });
+  });
+
+  // Document click (küçültme için)
+  document.addEventListener('click', function(e) {
+    if (currentZoomedCard && !currentZoomedCard.contains(e.target)) {
+      currentZoomedCard.classList.remove('zoomed');
+      document.body.style.overflow = 'auto';
+      if (isIOS) {
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      currentZoomedCard = null;
+    }
+  });
+
+  // ESC tuşu desteği
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && currentZoomedCard) {
+      currentZoomedCard.classList.remove('zoomed');
+      document.body.style.overflow = 'auto';
+      if (isIOS) {
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      currentZoomedCard = null;
+    }
+  });
+});
   </script>
 </body>
 </html>
