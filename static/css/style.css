@@ -233,3 +233,33 @@ h1:hover::after {
     opacity: 0;
   }
 }
+/* MOBİL ÖZEL AYARLAR */
+@media (max-width: 768px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .photo-card {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+  
+  .photo-card.zoomed {
+    width: 95vw !important;
+    height: 50vh !important;
+    transform: translate(-50%, -50%) scale(1.5) !important;
+  }
+  
+  .heart {
+    font-size: 14px !important;
+    animation: float-mobile 8s ease-in-out infinite;
+  }
+  
+  @keyframes float-mobile {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+}
