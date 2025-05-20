@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sevgilime Özel</title>
   <style>
-    /* TEMEL STİLLER */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -37,7 +36,6 @@
       text-align: justify;
     }
     
-    /* GALERİ DÜZENİ */
     .gallery {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -68,7 +66,6 @@
       display: block;
     }
     
-    /* KALP ANİMASYONU */
     .heart {
       position: fixed;
       font-size: 24px;
@@ -97,7 +94,6 @@
       }
     }
     
-    /* MOBİL UYUMLULUK */
     @media (max-width: 480px) {
       .gallery {
         gap: 10px;
@@ -117,7 +113,6 @@
   
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya “yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur.” Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece “seni seviyorum” demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
 
-  <!-- FOTOĞRAF GALERİSİ -->
   <div class="gallery">
     <div class="photo-card">
       <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy">
@@ -139,15 +134,12 @@
     </div>
   </div>
 
-  <!-- KALP ANİMASYON SCRIPTİ -->
   <script>
-    // Kalp oluşturma fonksiyonu
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.innerHTML = '❤';
       
-      // Rastgele pozisyon ve özellikler
       const size = 15 + Math.random() * 25;
       const x = Math.random();
       
@@ -159,24 +151,19 @@
       
       document.body.appendChild(heart);
       
-      // Animasyon bitince kalbi kaldır
       setTimeout(() => {
         heart.remove();
       }, 5000);
     }
     
-    // Sayfa yüklendiğinde kalpleri başlat
     window.addEventListener('load', () => {
-      // İlk 15 kalp
       for (let i = 0; i < 15; i++) {
         setTimeout(createHeart, i * 300);
       }
       
-      // Sürekli kalp üretme
       setInterval(createHeart, 800);
     });
     
-    // Sayfa boyutu değiştiğinde kalpleri ayarla
     window.addEventListener('resize', () => {
       document.querySelectorAll('.heart').forEach(heart => {
         heart.style.left = `${Math.random() * 100}vw`;
