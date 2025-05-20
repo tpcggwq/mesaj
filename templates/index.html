@@ -33,86 +33,55 @@
     }
 
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-      padding: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .photo-card {
-      width: 300px;
       background: transparent;
       border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       transition: transform 0.3s ease;
       cursor: pointer;
+      aspect-ratio: 1/1;
     }
 
     .photo-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+      transform: scale(1.03);
     }
 
     .photo-card img {
       width: 100%;
-      height: 300px;
+      height: 100%;
       object-fit: cover;
       display: block;
-      transition: filter 0.3s ease;
     }
 
-    .photo-card:hover img {
-      filter: brightness(1.1);
-    }
-
-    /* Zoom efekti için yeni stil */
-    .photo-card.zoomed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1000;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-      transform: none;
-    }
-
-    .photo-card.zoomed img {
-      height: auto;
-      max-height: 90vh;
-      max-width: 90vw;
-      object-fit: contain;
-    }
-
+    /* Kalp animasyonu */
     .heart {
       position: fixed;
       pointer-events: none;
-      animation: float 6s linear infinite;
+      animation: float 4s linear infinite;
       z-index: 999;
-      font-size: 24px;
-      will-change: transform;
+      font-size: 20px;
+      color: #ff6b6b;
     }
 
     @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+      0% { transform: translateY(100vh) translateX(10vw) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) translateX(30vw) rotate(360deg); opacity: 0; }
     }
 
     @media (max-width: 768px) {
-      .photo-card {
-        width: 100%;
-        max-width: 300px;
+      .gallery {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -148,56 +117,35 @@
   </div>
 
   <script>
-    // Gelişmiş kalp animasyonu
+    // Kalp oluşturma fonksiyonu
     function createHearts() {
       const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
-      const heartCount = 12;
+      const heartCount = 20;
       
-      // Önceki kalpleri temizle
-      document.querySelectorAll('.heart').forEach(heart => heart.remove());
-      
-      // Kalpleri oluştur
       for (let i = 0; i < heartCount; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
         heart.innerHTML = '❤';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-        heart.style.fontSize = (14 + Math.random() * 16) + 'px';
-        heart.style.animationDuration = (4 + Math.random() * 8) + 's';
-        heart.style.animationDelay = Math.random() * 5 + 's';
+        heart.style.fontSize = (10 + Math.random() * 20) + 'px';
+        heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+        heart.style.animationDelay = Math.random() * 3 + 's';
         document.body.appendChild(heart);
       }
     }
 
-    // Sayfa yüklendiğinde ve boyut değiştiğinde kalpleri oluştur
+    // Sayfa yüklendiğinde kalpleri oluştur
     window.addEventListener('load', createHearts);
-    window.addEventListener('resize', () => {
-      if (!window.resizeTimeout) {
-        window.resizeTimeout = setTimeout(() => {
-          createHearts();
-          window.resizeTimeout = null;
-        }, 200);
-      }
-    });
 
-    // Gelişmiş fotoğraf büyütme/küçültme
+    // Her 5 saniyede yeni kalpler ekle
+    setInterval(createHearts, 5000);
+
+    // Fotoğraf büyütme/küçültme
     document.querySelectorAll('.photo-card').forEach(card => {
       card.addEventListener('click', function() {
-        const isZoomed = this.classList.contains('zoomed');
-        
-        // Tüm zoom'ları kapat
-        document.querySelectorAll('.photo-card.zoomed').forEach(el => {
-          el.classList.remove('zoomed');
-        });
-        
-        // Eğer zaten zoomlu değilse, sadece bu karta zoom yap
-        if (!isZoomed) {
-          this.classList.add('zoomed');
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
+        this.classList.toggle('zoomed');
+        document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : '';
       });
     });
 
