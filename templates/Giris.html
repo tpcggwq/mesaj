@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giriş Yap</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #0ff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #0ff5;
+      width: 300px;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #222;
+      border: none;
+      color: #0ff;
+      border-radius: 5px;
+    }
+    label {
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background: #0ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .remember {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .remember input {
+      margin-right: 5px;
+    }
+    .link {
+      text-align: right;
+      font-size: 12px;
+      margin-top: 10px;
+      color: #0ff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Giriş Yap</h2>
+  <input type="email" id="email" placeholder="E-posta">
+  <input type="password" id="password" placeholder="Şifre">
+  <div class="remember">
+    <input type="checkbox" id="remember"> <label for="remember">Bu cihazı hatırla</label>
+  </div>
+  <button onclick="login()">Giriş Yap</button>
+  <div class="link" onclick="window.location.href='sifre-degistir.html'">Şifremi Değiştir</div>
+</div>
+
+<script>
+  // Otomatik doldurma
+  window.onload = function() {
+    const remembered = localStorage.getItem("remember");
+    if (remembered === "true") {
+      const email = localStorage.getItem("email");
+      const password = localStorage.getItem("password");
+      if (email && password) {
+        document.getElementById("email").value = email;
+        document.getElementById("password").value = password;
+        document.getElementById("remember").checked = true;
+      }
+    }
+  };
+
+  function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    // Örnek kullanıcı kontrolü
+    const user = JSON.parse(localStorage.getItem(email));
+    if (!user || user.password !== password) {
+      alert("E-posta veya şifre yanlış!");
+      return;
+    }
+
+    // Cihazı hatırla
+    if (document.getElementById("remember").checked) {
+      localStorage.setItem("remember", "true");
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+    } else {
+      localStorage.removeItem("remember");
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+    }
+
+    // Giriş başarılı
+    sessionStorage.setItem("loggedInUser", email);
+    window.location.href = "anasayfa.html";
+  }
+</script>
+
+</body>
+</html>
