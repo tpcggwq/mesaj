@@ -14,3 +14,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 export { auth };
+// Kayıt olma
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("signup-email").value;
+  const password = document.getElementById("signup-password").value;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("Kullanıcı oluşturuldu:", userCredential.user);
+  } catch (error) {
+    console.error("Kayıt hatası:", error.message);
+  }
+});
