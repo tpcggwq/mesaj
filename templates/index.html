@@ -4,28 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ana</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
-    /* EKSİKLERİ TAMAMLAYAN CSS */
+    /* REPODAKİ CSS İLE TAM UYUMLU DÜZENLEME */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: white;
+      font-family: "Lucida Console", "Courier New", monospace;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+      color: #f37055;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    p {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-size: 18px;
+      line-height: 1.7;
+      text-align: justify;
+      color: #f0f0f0;
+    }
+    
     .gallery {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 15px;
       padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
+    
+    .photo-card {
+      width: calc(50% - 10px); /* İki sütun için */
+      max-width: 300px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    
     .photo-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px rgba(255,255,255,0.1);
+    }
+    
+    .photo-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 24px;
+      color: #ff6b6b;
+      animation: float 4s linear infinite;
+      z-index: 999;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .photo-card {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Aynı başlık ve paragraf içeriği -->
   <h1>SELAM AŞKIM</h1>
+  
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin...</p>
 
-  <!-- GALERİ KISMI (2'Lİ SIRA) -->
+  <!-- İKİLİ FOTOĞRAF DÜZENİ -->
   <div class="gallery">
     <div class="photo-card">
       <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg">
@@ -50,50 +117,30 @@
     </div>
   </div>
 
-  <!-- KALPLER İÇİN JS -->
+  <!-- KALP ANİMASYONU JS -->
   <script>
-    // CSS STİL EKLEME
-    const style = document.createElement('style');
-    style.textContent = `
-      .heart {
-        position: fixed;
-        pointer-events: none;
-        animation: float 4s linear infinite;
-        z-index: 999;
-        font-size: 20px;
-        color: #ff6b6b;
-      }
-      @keyframes float {
-        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-        50% { opacity: 1; }
-        100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // KALP OLUŞTURMA
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.innerHTML = '❤';
       heart.style.left = Math.random() * 100 + 'vw';
       heart.style.fontSize = (15 + Math.random() * 25) + 'px';
-      heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+      heart.style.animationDuration = (3 + Math.random() * 3) + 's';
       document.body.appendChild(heart);
       
       // Animasyon bitince kalbi sil
-      setTimeout(() => {
-        heart.remove();
-      }, 7000);
+      setTimeout(() => heart.remove(), 4000);
     }
-
-    // HER 0.5 SANİYEDE YENİ KALP
-    setInterval(createHeart, 500);
     
-    // BAŞLANGIÇTA 20 KALP
-    for(let i=0; i<20; i++) {
-      setTimeout(createHeart, i * 100);
-    }
+    // Sayfa yüklendiğinde 20 kalp oluştur
+    window.onload = () => {
+      for(let i=0; i<20; i++) {
+        setTimeout(createHeart, i * 100);
+      }
+    };
+    
+    // Her saniye yeni kalp üret
+    setInterval(createHeart, 1000);
   </script>
 </body>
 </html>
