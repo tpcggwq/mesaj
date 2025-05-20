@@ -55,9 +55,9 @@
     }
 
     .photo-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
-      filter: brightness(1.15);
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(255, 105, 180, 0.9);
+      filter: brightness(1.2);
     }
 
     .photo-card img {
@@ -103,6 +103,27 @@
       }
     }
 
+    #playPauseBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #f37055;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(243, 112, 85, 0.7);
+      transition: background-color 0.3s ease;
+      z-index: 1100;
+    }
+
+    #playPauseBtn:hover {
+      background-color: #ff5a3c;
+    }
+
     @media (max-width: 480px) {
       .gallery {
         gap: 10px;
@@ -117,30 +138,12 @@
       .heart {
         font-size: 22px;
       }
-    }
 
-    /* Müzik player container */
-    #musicPlayer {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: rgba(255 255 255 / 0.1);
-      padding: 10px 15px;
-      border-radius: 20px;
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1500;
-      user-select: none;
-    }
-
-    #playPauseBtn {
-      background: none;
-      border: none;
-      color: #ff1493;
-      font-size: 20px;
-      cursor: pointer;
+      #playPauseBtn {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+      }
     }
   </style>
 </head>
@@ -152,38 +155,38 @@
 
   <div class="gallery">
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy" alt="Fotoğraf 1">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy" alt="Fotoğraf 2">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy" alt="Fotoğraf 3">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy" alt="Fotoğraf 4">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy" alt="Fotoğraf 5">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy" alt="Fotoğraf 6">
     </div>
   </div>
 
-  <!-- Müzik player -->
-  <div id="musicPlayer">
-    <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/26/audio_f123456789.mp3?filename=baby-im-yours-cover-12345.mp3" preload="auto"></audio>
-    <button id="playPauseBtn" aria-label="Play/Pause music">▶️</button>
-    <span style="color: #ff1493; font-weight: 600;">Baby I'm Yours</span>
-  </div>
+  <button id="playPauseBtn" aria-label="Müziği Oynat/Durdur">▶️</button>
+  <audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/03/31/audio_004a8fa435.mp3?filename=baby-im-yours-123737.mp3" type="audio/mpeg" />
+    Tarayıcınız audio elementini desteklemiyor.
+  </audio>
 
   <script>
-    // Kalp animasyonu
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.innerHTML = '❤';
 
       const size = 20 + Math.random() * 30;
-      const color = `h
+      const color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
+
+      const moveX = (Math.random() * 2 - 1).
