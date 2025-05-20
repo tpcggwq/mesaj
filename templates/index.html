@@ -40,6 +40,8 @@
     label {
       font-size: 0.9rem;
       user-select: none;
+      display: block;
+      margin-bottom: 5px;
     }
     button {
       width: 100%;
@@ -125,18 +127,38 @@
       cursor: pointer;
       z-index: 1001;
     }
+    /* Gizli inputlar */
+    #isim-group, #confirm-password-group {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="container" id="form-container">
     <h2 id="form-title">Giriş Yap</h2>
+
+    <div id="isim-group">
+      <label for="isim">İsim</label>
+      <input type="text" id="isim" placeholder="İsim" autocomplete="name" />
+    </div>
+
+    <label for="email">E-posta</label>
     <input type="email" id="email" placeholder="E-posta" autocomplete="username" />
+
+    <label for="password">Şifre</label>
     <input type="password" id="password" placeholder="Şifre" autocomplete="current-password" />
+
+    <div id="confirm-password-group">
+      <label for="confirm-password">Şifreyi Doğrula</label>
+      <input type="password" id="confirm-password" placeholder="Şifreyi Doğrula" autocomplete="new-password" />
+    </div>
+
     <div class="remember">
       <input type="checkbox" id="remember" />
       <label for="remember">Bu cihazı hatırla</label>
     </div>
+
     <button id="submit-btn">Giriş Yap</button>
     <button class="switch-btn" id="switch-btn">Kayıt Ol</button>
     <div class="forgot-link" id="forgot-pass">Şifreni mi unuttun? Değiştir</div>
@@ -146,9 +168,7 @@
   <div id="friends-panel">
     <button id="close-friends" style="float:right; background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button>
     <h3>Arkadaşlar</h3>
-    <div id="friends-list">
-      <!-- Arkadaşlar listesi buraya -->
-    </div>
+    <div id="friends-list"></div>
     <hr style="margin:10px 0; border-color: #555;">
     <form id="add-friend-form">
       <input type="text" id="friend-username" placeholder="Arkadaş kullanıcı adı" required style="width: 70%; padding: 5px;" />
@@ -161,7 +181,6 @@
   <button id="show-friends">Arkadaşlar</button>
 
   <script>
-    const formContainer = document.getElementById('form-container');
     const formTitle = document.getElementById('form-title');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -169,6 +188,10 @@
     const submitBtn = document.getElementById('submit-btn');
     const switchBtn = document.getElementById('switch-btn');
     const forgotPass = document.getElementById('forgot-pass');
+    const isimGroup = document.getElementById('isim-group');
+    const isimInput = document.getElementById('isim');
+    const confirmPassGroup = document.getElementById('confirm-password-group');
+    const confirmPassInput = document.getElementById('confirm-password');
 
     let isLogin = true;
 
@@ -183,7 +206,7 @@
       }
     };
 
-    // Form tipini değiştir
+    // Form tipini değiştir (Giriş <-> Kayıt)
     switchBtn.onclick = () => {
       isLogin = !isLogin;
       if (isLogin) {
@@ -191,14 +214,21 @@
         submitBtn.textContent = 'Giriş Yap';
         switchBtn.textContent = 'Kayıt Ol';
         forgotPass.style.display = 'block';
+        isimGroup.style.display = 'none';
+        confirmPassGroup.style.display = 'none';
       } else {
         formTitle.textContent = 'Kayıt Ol';
         submitBtn.textContent = 'Kayıt Ol';
         switchBtn.textContent = 'Giriş Yap';
         forgotPass.style.display = 'none';
+        isimGroup.style.display = 'block';
+        confirmPassGroup.style.display = 'block';
       }
+      // Form temizle
+      isimInput.value = '';
       emailInput.value = '';
       passwordInput.value = '';
+      confirmPassInput.value = '';
       rememberCheckbox.checked = false;
     };
 
@@ -208,16 +238,18 @@
     };
 
     submitBtn.onclick = () => {
+      const isim = isimInput.value.trim();
       const email = emailInput.value.trim().toLowerCase();
       const password = passwordInput.value;
-
-      if (!email || !password) {
-        alert('Lütfen tüm alanları doldurun!');
-        return;
-      }
+      const confirmPassword = confirmPassInput.value;
 
       if (isLogin) {
         // Giriş işlemi
+        if (!email || !password) {
+          alert('Lütfen tüm alanları doldurun!');
+          return;
+        }
+
         const userStr = localStorage.getItem(email);
         if (!userStr) {
           alert('Böyle bir kullanıcı bulunamadı!');
@@ -237,109 +269,4 @@
           localStorage.setItem('rememberedEmail', email);
           localStorage.setItem('rememberedPass', password);
         } else {
-          localStorage.removeItem('rememberedEmail');
-          localStorage.removeItem('rememberedPass');
-        }
-
-        alert('Giriş başarılı!');
-        window.location.href = 'index.html';
-
-      } else {
-        // Kayıt işlemi
-        if (localStorage.getItem(email)) {
-          alert('Bu e-posta zaten kayıtlı!');
-          return;
-        }
-
-        if (password.length < 6) {
-          alert('Şifre en az 6 karakter olmalı!');
-          return;
-        }
-
-        // Yeni kullanıcı kaydet
-        const newUser = { password: password, friends: [] };
-        localStorage.setItem(email, JSON.stringify(newUser));
-
-        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
-
-        // Formu girişe döndür
-        switchBtn.click();
-      }
-    };
-
-    // Arkadaşlar paneli kontrolü
-    const showFriendsBtn = document.getElementById('show-friends');
-    const friendsPanel = document.getElementById('friends-panel');
-    const closeFriendsBtn = document.getElementById('close-friends');
-    const addFriendForm = document.getElementById('add-friend-form');
-    const friendUsernameInput = document.getElementById('friend-username');
-    const friendError = document.getElementById('friend-error');
-    const friendsListDiv = document.getElementById('friends-list');
-
-    // Simüle edilmiş kayıtlı kullanıcılar listesi (örnek)
-    const registeredUsers = ['toprak', 'dora', 'ali', 'ayse'];
-
-    // Mevcut arkadaşlar listesi (localStorage'dan alınabilir)
-    let friends = JSON.parse(localStorage.getItem('friends') || '[]');
-
-    // Arkadaşlar panelini açma
-    showFriendsBtn.addEventListener('click', () => {
-      friendsPanel.style.display = 'block';
-      friendError.style.display = 'none';
-      renderFriends();
-    });
-
-    // Arkadaşlar panelini kapatma
-    closeFriendsBtn.addEventListener('click', () => {
-      friendsPanel.style.display = 'none';
-      friendError.style.display = 'none';
-    });
-
-    // Arkadaş ekleme işlemi
-    addFriendForm.addEventListener('submit', e => {
-      e.preventDefault();
-      friendError.style.display = 'none';
-      const newFriend = friendUsernameInput.value.trim().toLowerCase();
-
-      if (!registeredUsers.includes(newFriend)) {
-        friendError.textContent = 'Kullanıcı bulunamadı.';
-        friendError.style.display = 'block';
-        return;
-      }
-
-      if (friends.includes(newFriend)) {
-        friendError.textContent = 'Bu kullanıcı zaten arkadaş listende.';
-        friendError.style.display = 'block';
-        return;
-      }
-
-      friends.push(newFriend);
-      localStorage.setItem('friends', JSON.stringify(friends));
-      friendUsernameInput.value = '';
-      renderFriends();
-    });
-
-    // Arkadaşlar listesini ekrana yazdırma fonksiyonu
-    function renderFriends() {
-      if (friends.length === 0) {
-        friendsListDiv.innerHTML = '<p>Henüz arkadaşınız yok.</p>';
-        return;
-      }
-      friendsListDiv.innerHTML = '';
-      friends.forEach(friend => {
-        const div = document.createElement('div');
-        // Rastgele çevrimiçi durumu simülasyonu
-        const online = Math.random() > 0.5;
-        div.textContent = friend + (online ? ' (Çevrimiçi)' : ' (Çevrimdışı)');
-        div.className = online ? 'online' : 'offline';
-        friendsListDiv.appendChild(div);
-      });
-    }
-
-    // İlk açılışta varsa arkadaşları göster
-    renderFriends();
-
-  </script>
-
-</body>
-</html>
+          localStorage.removeItem('rememberedEmail
