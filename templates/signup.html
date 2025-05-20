@@ -76,7 +76,20 @@
       const name = document.getElementById("signupName").value;
       const email = document.getElementById("signupEmail").value;
       const password = document.getElementById("signupPassword").value;
-      // Firebase signup kodu buraya gelecek
+          </script> <!-- signup() fonksiyonu kapanışı -->
+    
+    <!-- 🔽 Firebase SDK ve Config BURAYA EKLE -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDCnBMVNe3A9LPGbO_ZhExn5TKqWLz7WuU",
+        authDomain: "mesaj-f1916.firebaseapp.com",
+        projectId: "mesaj-f1916",
+        storageBucket: "mesaj-f1916.appspot.com",
+        messagingSender
+
       console.log("Kayıt denemesi:", name, email);
     }
   </script>
