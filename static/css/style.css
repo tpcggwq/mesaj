@@ -1,67 +1,19 @@
-/* TEMEL YAPILANDIRMA */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #121212;
-  color: #ffffff;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-
-/* GALERİ DÜZENİ */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
-  padding: 15px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.photo-card {
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
-  aspect-ratio: 1/1;
-}
-
-.photo-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 16px rgba(255,255,255,0.1);
-}
-
-.photo-card img {
+input, button, textarea {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  margin-top: 10px;
+  padding: 10px 12px; /* Kenarlara biraz daha dengeli boşluk */
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
-/* KALP ANİMASYONU */
-.heart {
-  position: fixed;
-  font-size: 24px;
-  color: #ff6b6b;
-  pointer-events: none;
-  z-index: 9999;
-  animation: float 4s linear forwards;
-  user-select: none;
+#chat-area {
+  padding: 10px 12px; /* İçerik ile kenar arasındaki boşluğu eşitledik */
 }
 
-@keyframes float {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-}
-
-/* MOBİL UYUMLULUK */
-@media (max-width: 480px) {
-  .gallery {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 10px;
-  }
+#friends-list div {
+  padding: 8px 12px; /* Yatay padding artırıldı */
+  border-bottom: 1px solid #0ff4;
+  cursor: pointer;
 }
