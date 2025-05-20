@@ -1,332 +1,149 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sevgilime Özel</title>
+  <meta charset="UTF-8">
+  <title>Mesajlaşma Defteri</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      background-color: #121212;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-      min-height: 100vh;
-      padding-bottom: 50px;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
     }
 
-    h1 {
-      text-align: center;
-      margin: 30px 0;
-      color: #f37055;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      font-size: 2.2rem;
+    /* Üst Menü */
+    .topbar {
+      background: #111;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 10px #00ffff;
     }
 
-    p {
-      max-width: 800px;
-      margin: 0 auto 30px;
-      padding: 0 20px;
-      text-align: justify;
+    .topbar h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #00ffff;
     }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      padding: 0 15px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .photo-card {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      aspect-ratio: 1/1;
-      transition: all 0.3s ease;
-    }
-
-    .photo-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
-      filter: brightness(1.15);
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .heart {
-      position: fixed;
-      font-size: 28px;
-      color: #ff1493;
-      pointer-events: none;
-      animation: float 4s linear forwards;
-      z-index: 1000;
-      user-select: none;
-      text-shadow: 0 0 15px #ff69b4;
-      opacity: 0;
-      left: calc(var(--start-x) * 100vw);
-      top: calc(var(--start-y) * 100vh);
-    }
-
-    @keyframes float {
-      0% {
-        transform: translate(0, 0) rotate(0deg) scale(0.5);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-        transform: translate(0, 0) rotate(0deg) scale(1);
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: 
-          translate(calc(var(--move-x) * 100px), 
-                    calc(var(--move-y) * -100px)) 
-          rotate(720deg) 
-          scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    #music-control {
-      display: block;
-      margin: 30px auto;
-      background-color: #ff1493;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      padding: 12px 30px;
-      font-size: 1.1rem;
+    .topbar button {
+      background: transparent;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      padding: 8px 15px;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 0 15px #ff1493;
-      transition: background-color 0.3s ease;
-      user-select: none;
+      transition: 0.3s;
     }
 
-    #music-control:hover {
-      background-color: #ff69b4;
-      box-shadow: 0 0 25px #ff69b4;
+    .topbar button:hover {
+      background: #00ffff;
+      color: #000;
     }
 
-    @media (max-width: 480px) {
-      .gallery {
-        gap: 10px;
-        padding: 0 10px;
-      }
-
-      h1 {
-        font-size: 1.8rem;
-        margin: 20px 0;
-      }
-
-      .heart {
-        font-size: 22px;
-      }
-
-      #music-control {
-        font-size: 1rem;
-        padding: 10px 20px;
-      }
+    /* Arkadaş Paneli */
+    .friend-panel {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100vh;
+      background: #1a1a1a;
+      box-shadow: -5px 0 15px rgba(0, 255, 255, 0.3);
+      padding: 20px;
+      transition: 0.4s ease-in-out;
+      z-index: 999;
     }
+
+    .friend-panel.active {
+      right: 0;
+    }
+
+    .friend-panel h2 {
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .friend-panel input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      background: #111;
+      border: none;
+      border-bottom: 2px solid #00ffff;
+      color: #0ff;
+    }
+
+    .friend-panel button {
+      width: 100%;
+      padding: 8px;
+      background: #00ffff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .friend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+
+    .online { background: limegreen; }
+    .offline { background: gray; }
   </style>
 </head>
 <body>
-<!-- Kayıt/Giriş Ekranı -->
-<div id="auth-screen" style="position: fixed; top:0; left:0; width:100%; height:100vh; background-color:#121212; color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999;">
-  <h2>Hoş Geldin</h2>
-  <p>Lütfen giriş yap ya da kayıt ol</p>
-  <input type="text" id="username" placeholder="Kullanıcı Adı" style="margin: 10px; padding: 10px; font-size: 16px;">
-  <input type="password" id="password" placeholder="Şifre" style="margin: 10px; padding: 10px; font-size: 16px;">
-  <div>
-    <button onclick="register()" style="margin: 5px; padding: 10px 20px;">Kayıt Ol</button>
-    <button onclick="login()" style="margin: 5px; padding: 10px 20px;">Giriş Yap</button>
-  </div>
-  <p id="auth-msg" style="margin-top: 10px; color: #ff69b4;"></p>
-</div>
 
-<!-- Aşağıya bu script'i EKLE (mevcut scriptlerin sonuna ekleyebilirsin) -->
-<script>
- window.onload = () => {
-  // Her zaman giriş ekranı gösterilecek
-  document.getElementById("auth-screen").style.display = "flex";
-  // Diğer her şey gizlenecek
-  document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "none");
-};
-  function showMainContent(username) {
-    localStorage.setItem("currentUser", username);
-    document.getElementById("auth-screen").style.display = "none";
-    document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "");
-  }
-
-  function register() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    if (!username || !password) return showMessage("Lütfen tüm alanları doldurun.");
-
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    if (users[username]) {
-      showMessage("Bu kullanıcı adı zaten alınmış.");
-    } else {
-      users[username] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      showMainContent(username);
-    }
-  }
-
-  function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-
-    if (users[username] === password) {
-      showMainContent(username);
-    } else {
-      showMessage("Kullanıcı adı veya şifre hatalı.");
-    }
-  }
-
-  function showMessage(msg) {
-    document.getElementById("auth-msg").innerText = msg;
-  }
-</script>
-  <h1>SELAM AŞKIM</h1>
-
-  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığının göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal oluyorum resmen. Şey derler ya "yanlış trende ne kadar uzun süre geçirirsen, eve dönmek o kadar zor olur." Ben yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkçası. Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu fark etmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil fark etmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğim de bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun. Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdin, derdimi dinledin tavsiye verdin tabi ki bunların hiçbirini karşılıksız bırakmayacağım. Seni çok seviyorum meleğim, benim güzeller güzeli sevgilim. Umarım seninle büyüyüp seninle yaşlanırım, yaşlanırken de gençleşirim, hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin Toprak</p>
-
-  <div class="gallery">
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy" alt="Fotoğraf 1">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy" alt="Fotoğraf 2">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy" alt="Fotoğraf 3">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy" alt="Fotoğraf 4">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy" alt="Fotoğraf 5">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy" alt="Fotoğraf 6">
-    </div>
+  <div class="topbar">
+    <h1>Mesajlaşma Defteri</h1>
+    <button onclick="toggleFriends()">Arkadaşlar</button>
   </div>
 
-  <button id="music-control">Müziği Çal</button>
-  <audio id="audio" src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/Irokz%20-%20Goodbye%20My%20Love%20%5BNCS%20Release%5D.mp3" preload="auto"></audio>
+  <div class="friend-panel" id="friendPanel">
+    <h2>Arkadaşların</h2>
+    <input type="text" id="friendName" placeholder="Arkadaş ismi gir">
+    <button onclick="addFriend()">Ekle</button>
+    <div id="friendList"></div>
+  </div>
 
   <script>
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.innerHTML = '❤';
-
-      const size = 20 + Math.random() * 30;
-      const color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
-
-      const moveX = (Math.random() * 2 - 1).toFixed(2);
-      const moveY = (Math.random() * 1 + 0.5).toFixed(2);
-
-      const startX = Math.random();
-      const startY = Math.random();
-
-      heart.style.setProperty('--start-x', startX);
-      heart.style.setProperty('--start-y', startY);
-      heart.style.setProperty('--move-x', moveX);
-      heart.style.setProperty('--move-y', moveY);
-
-      heart.style.fontSize = `${size}px`;
-      heart.style.color = color;
-      heart.style.textShadow = `0 0 15px ${color}`;
-      heart.style.animationDuration = `${3 + Math.random() * 3}s`;
-      heart.style.animationDelay = `${Math.random() * 2}s`;
-
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 5000);
+    function toggleFriends() {
+      document.getElementById("friendPanel").classList.toggle("active");
     }
 
-    window.addEventListener('load', () => {
-      for (let i = 0; i < 20; i++) {
-        setTimeout(createHeart, i * 200);
-      }
-      setInterval(createHeart, 1000);
-    });
+    function addFriend() {
+      const name = document.getElementById("friendName").value.trim();
+      if (!name) return;
 
-    const musicControl = document.getElementById('music-control');
-    const audio = document.getElementById('audio');
+      const friendList = document.getElementById("friendList");
 
-    musicControl.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        musicControl.textContent = 'Müziği Durdur';
-      } else {
-        audio.pause();
-        musicControl.textContent = 'Müziği Çal';
-      }
-    });
+      const friendDiv = document.createElement("div");
+      friendDiv.className = "friend";
+      friendDiv.innerHTML = `
+        <span>${name}</span>
+        <span class="status-dot ${Math.random() > 0.5 ? 'online' : 'offline'}"></span>
+      `;
+      friendList.appendChild(friendDiv);
+
+      document.getElementById("friendName").value = "";
+    }
   </script>
 
 </body>
 </html>
-<script>
-  window.onload = () => {
-    // Her zaman giriş ekranı göster
-    document.getElementById("auth-screen").style.display = "flex";
-    document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "none");
-  };
-
-  function showMainContent(username) {
-    document.getElementById("auth-screen").style.display = "none";
-    document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "");
-  }
-
-  function register() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    if (!username || !password) return showMessage("Boş bırakma kardeşim 😅");
-
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    if (users[username]) {
-      showMessage("Zaten kayıtlı bir kullanıcı.");
-    } else {
-      users[username] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      showMainContent(username);
-    }
-  }
-
-  function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-
-    if (users[username] === password) {
-      showMainContent(username);
-    } else {
-      showMessage("Kullanıcı adı ya da şifre yanlış.");
-    }
-  }
-
-  function showMessage(msg) {
-    document.getElementById("auth-msg").innerText = msg;
-  }
-</script>
