@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Static dosyaları göster (CSS, JS, HTML)
+// Static dosyalar
 app.use(express.static('public'));
 
 // Tüm istekleri index.html'e yönlendir
