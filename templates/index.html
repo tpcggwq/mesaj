@@ -3,176 +3,224 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Giriş Yap / Kayıt Ol</title>
+<title>Mesajlaşma Sistemi</title>
 <style>
   body {
-    background: #050a15;
-    color: #0ff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    margin: 0; padding: 0; font-family: Arial, sans-serif; background: #050a15; color: #0ff;
   }
-  .container {
+  #login-container, #chat-container {
+    max-width: 400px;
+    margin: 40px auto;
     background: #111f3d;
-    padding: 30px;
-    border-radius: 12px;
-    width: 320px;
-    box-shadow: 0 0 30px #0ff5;
+    padding: 20px;
+    border-radius: 10px;
   }
-  h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  input[type="email"],
-  input[type="password"],
-  input[type="text"] {
+  input, button, textarea {
     width: 100%;
+    margin-top: 10px;
     padding: 10px;
-    margin-bottom: 15px;
     border-radius: 6px;
     border: none;
     font-size: 1rem;
     box-sizing: border-box;
   }
-  label {
-    font-size: 0.9rem;
-    user-select: none;
-  }
   button {
-    width: 100%;
     background: #0ff;
     color: #000;
-    border: none;
-    padding: 12px;
-    border-radius: 6px;
     font-weight: bold;
-    font-size: 1.1rem;
     cursor: pointer;
-    margin-bottom: 10px;
-    transition: background-color 0.3s ease;
   }
   button:hover {
     background: #0cc;
   }
-  .switch-btn {
-    background: none;
-    border: none;
-    color: #0ff;
-    text-decoration: underline;
-    cursor: pointer;
-    margin: 10px 0;
-    display: block;
-    font-size: 0.95rem;
-    text-align: center;
+  #chat-area {
+    border: 1px solid #0ff;
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #001122;
+    margin-bottom: 10px;
   }
-  .remember-container {
-    margin: 0 0 10px 0; /* Alt boşluk ve üst sıfır */
+  .message {
+    margin-bottom: 15px;
+    border-bottom: 1px dotted #0ff;
+    padding-bottom: 10px;
+  }
+  .message img {
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin-top: 5px;
+  }
+  #friends-list {
+    margin-top: 20px;
+  }
+  #friends-list div {
+    padding: 8px;
+    border-bottom: 1px solid #0ff4;
+    cursor: pointer;
+  }
+  #friends-list div:hover {
+    background: #0ff2;
+    color: #000;
+  }
+  #remember-me-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    margin-top: 10px;
+  }
+  #remember-me-container input[type="checkbox"] {
+    margin-right: 8px;
   }
 </style>
 </head>
 <body>
 
-  <div class="container" id="form-container">
-    <h2 id="form-title">Giriş Yap</h2>
-    <input type="email" id="email" placeholder="E-posta" autocomplete="username" />
-    <input type="password" id="password" placeholder="Şifre" autocomplete="current-password" />
-    
-    <div class="remember-container">
-      <input type="checkbox" id="remember" />
-      <label for="remember">Beni Hatırla</label>
-    </div>
-    
-    <button id="submit-btn">Giriş Yap</button>
-    <button class="switch-btn" id="switch-btn">Kayıt Ol</button>
+<div id="login-container">
+  <h2>Giriş Yap / Kayıt Ol</h2>
+  <input type="text" id="username" placeholder="Kullanıcı Adı" autocomplete="username" />
+  <input type="email" id="email" placeholder="E-posta (sadece kayıt için)" autocomplete="email" />
+  <input type="password" id="password" placeholder="Şifre" autocomplete="current-password" />
+  <div id="remember-me-container">
+    <input type="checkbox" id="remember-me" />
+    <label for="remember-me">Beni hatırla</label>
   </div>
+  <button id="login-btn">Giriş Yap</button>
+  <button id="register-btn">Kayıt Ol</button>
+</div>
+
+<div id="chat-container" style="display:none;">
+  <h2>Mesajlaşma</h2>
+  <div>
+    <b>Hoşgeldin, <span id="user-name"></span>!</b>
+    <button id="logout-btn" style="float:right; width:auto; padding:5px 10px; background:#f00; color:#fff; border:none; border-radius:5px;">Çıkış</button>
+  </div>
+  
+  <input type="text" id="friend-username" placeholder="Arkadaşının kullanıcı adını yaz ve ekle" />
+  <button id="add-friend-btn">Arkadaş Ekle</button>
+  <div id="friends-list"></div>
+  
+  <div id="chat-area"></div>
+  
+  <input type="text" id="note-input" placeholder="Fotoğraf altına not yaz..." />
+  <input type="file" id="photo-input" accept="image/*" />
+  <button id="send-msg-btn">Gönder</button>
+</div>
 
 <script>
-const formContainer = document.getElementById('form-container');
-const formTitle = document.getElementById('form-title');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const rememberCheckbox = document.getElementById('remember');
-const submitBtn = document.getElementById('submit-btn');
-const switchBtn = document.getElementById('switch-btn');
+(() => {
+  const loginContainer = document.getElementById('login-container');
+  const chatContainer = document.getElementById('chat-container');
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const rememberMeCheckbox = document.getElementById('remember-me');
+  const loginBtn = document.getElementById('login-btn');
+  const registerBtn = document.getElementById('register-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const userNameSpan = document.getElementById('user-name');
 
-let isLogin = true;
+  const friendUsernameInput = document.getElementById('friend-username');
+  const addFriendBtn = document.getElementById('add-friend-btn');
+  const friendsListDiv = document.getElementById('friends-list');
 
-// Sayfa yüklendiğinde hatırlanan bilgileri doldur
-window.onload = () => {
-  const rememberedEmail = localStorage.getItem('rememberedEmail');
-  const rememberedPass = localStorage.getItem('rememberedPass');
-  if (rememberedEmail && rememberedPass) {
-    emailInput.value = rememberedEmail;
-    passwordInput.value = rememberedPass;
-    rememberCheckbox.checked = true;
+  const chatArea = document.getElementById('chat-area');
+  const noteInput = document.getElementById('note-input');
+  const photoInput = document.getElementById('photo-input');
+  const sendMsgBtn = document.getElementById('send-msg-btn');
+
+  // Kullanıcı verileri storage keyleri
+  const STORAGE_USERS_KEY = 'users';
+  const STORAGE_LOGGEDIN_KEY = 'loggedInUser'; // obj: {username,email,rememberMe}
+  const STORAGE_MESSAGES_KEY = 'messages'; // {from,to, note, photoDataUrl, timestamp}
+
+  // Kullanıcıları localStorage'dan al
+  function getUsers() {
+    return JSON.parse(localStorage.getItem(STORAGE_USERS_KEY) || '{}');
   }
-};
-
-// Form tipini değiştir (Giriş / Kayıt)
-switchBtn.onclick = () => {
-  isLogin = !isLogin;
-  if (isLogin) {
-    formTitle.textContent = 'Giriş Yap';
-    submitBtn.textContent = 'Giriş Yap';
-    switchBtn.textContent = 'Kayıt Ol';
-  } else {
-    formTitle.textContent = 'Kayıt Ol';
-    submitBtn.textContent = 'Kayıt Ol';
-    switchBtn.textContent = 'Giriş Yap';
-  }
-  emailInput.value = '';
-  passwordInput.value = '';
-  rememberCheckbox.checked = false;
-};
-
-// Submit butonuna tıklandığında
-submitBtn.onclick = () => {
-  const email = emailInput.value.trim().toLowerCase();
-  const password = passwordInput.value;
-
-  if (!email || !password) {
-    alert('Lütfen tüm alanları doldurun!');
-    return;
+  function saveUsers(users) {
+    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
   }
 
-  if (isLogin) {
-    // Giriş işlemi
-    const userStr = localStorage.getItem(email);
-    if (!userStr) {
-      alert('Böyle bir kullanıcı bulunamadı!');
-      return;
-    }
-    const user = JSON.parse(userStr);
-    if (user.password !== password) {
-      alert('Şifre yanlış!');
-      return;
-    }
+  // Mesajları localStorage'dan al
+  function getMessages() {
+    return JSON.parse(localStorage.getItem(STORAGE_MESSAGES_KEY) || '[]');
+  }
+  function saveMessages(messages) {
+    localStorage.setItem(STORAGE_MESSAGES_KEY, JSON.stringify(messages));
+  }
 
-    // Giriş başarılı - sessionStorage güncelle
-    sessionStorage.setItem('loggedInUser', email);
+  // Arkadaş listesini kullanıcı objesinde tutacağız, her kullanıcı friends: [] tutar.
 
-    // Beni Hatırla işlevi
-    if (rememberCheckbox.checked) {
-      localStorage.setItem('rememberedEmail', email);
-      localStorage.setItem('rememberedPass', password);
+  // Girişli kullanıcıyı getir
+  function getLoggedInUser() {
+    return JSON.parse(localStorage.getItem(STORAGE_LOGGEDIN_KEY) || 'null');
+  }
+
+  // Girişli kullanıcıyı ayarla veya temizle
+  function setLoggedInUser(userObj) {
+    if(userObj) {
+      if(userObj.rememberMe) {
+        localStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(userObj));
+      } else {
+        // Sadece sessionStorage kullan
+        sessionStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(userObj));
+        localStorage.removeItem(STORAGE_LOGGEDIN_KEY);
+      }
     } else {
-      localStorage.removeItem('rememberedEmail');
-      localStorage.removeItem('rememberedPass');
+      localStorage.removeItem(STORAGE_LOGGEDIN_KEY);
+      sessionStorage.removeItem(STORAGE_LOGGEDIN_KEY);
     }
+  }
 
-    alert('Giriş başarılı!');
-    // Burada mesajlaşma sayfasına yönlendirebilirsin:
-    window.location.href = '/';  // Ana sayfaya yönlendirir, genelde index.html'yi açar
-  } else {
-    // Kayıt işlemi
-    if (localStorage.getItem(email)) {
-      alert('Bu e-posta zaten kayıtlı!');
+  // Sayfa yüklendiğinde otomatik giriş kontrolü (localStorage veya sessionStorage)
+  function autoLogin() {
+    let user = getLoggedInUser();
+    if(!user) {
+      // SessionStorage kontrol
+      user = JSON.parse(sessionStorage.getItem(STORAGE_LOGGEDIN_KEY) || 'null');
+      if(user) {
+        // sessionStorage'dan login bilgisi bulduk, localStorage'da yoksa session'da var.
+        // sessionStorage'dan da login bilgisi alınıyor.
+        localStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(user));
+      }
+    }
+    if(user) {
+      showChat(user);
+    } else {
+      showLogin();
+    }
+  }
+
+  // Login formunu göster, chat gizle
+  function showLogin() {
+    loginContainer.style.display = 'block';
+    chatContainer.style.display = 'none';
+    usernameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+    rememberMeCheckbox.checked = false;
+  }
+
+  // Chat formunu göster, login gizle
+  function showChat(user) {
+    loginContainer.style.display = 'none';
+    chatContainer.style.display = 'block';
+    userNameSpan.textContent = user.username;
+
+    // Arkadaş listesi ve mesajları yükle
+    renderFriends(user);
+    renderMessages(user.username, null);
+  }
+
+  // Kullanıcı kayıt işlemi
+  registerBtn.onclick = () => {
+    const username = usernameInput.value.trim().toLowerCase();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
+
+    if (!username || !email || !password) {
+      alert('Lütfen tüm alanları doldurun!');
       return;
     }
 
@@ -181,16 +229,229 @@ submitBtn.onclick = () => {
       return;
     }
 
-    // Yeni kullanıcı kaydet
-    const newUser = { password: password, friends: [] };
-    localStorage.setItem(email, JSON.stringify(newUser));
+    const users = getUsers();
 
-    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+    if (users[username]) {
+      alert('Bu kullanıcı adı zaten kayıtlı!');
+      return;
+    }
 
-    // Formu girişe döndür
-    switchBtn.click();
+    // Yeni kullanıcı oluştur
+    users[username] = {
+      email,
+      password,
+      friends: []
+    };
+    saveUsers(users);
+
+    alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+
+    // Kayıt sonrası otomatik login yap
+    const rememberMe = rememberMeCheckbox.checked;
+    setLoggedInUser({ username, email, rememberMe });
+    showChat({ username, email, rememberMe });
+  };
+
+  // Kullanıcı giriş işlemi
+  loginBtn.onclick = () => {
+    const username = usernameInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      alert('Lütfen kullanıcı adı ve şifre girin!');
+      return;
+    }
+
+    const users = getUsers();
+    const user = users[username];
+    if (!user) {
+      alert('Böyle bir kullanıcı bulunamadı!');
+      return;
+    }
+    if (user.password !== password) {
+      alert('Şifre yanlış!');
+      return;
+    }
+
+    const rememberMe = rememberMeCheckbox.checked;
+    setLoggedInUser({ username, email: user.email, rememberMe });
+    showChat({ username, email: user.email, rememberMe });
+  };
+
+  // Çıkış yap
+  logoutBtn.onclick = () => {
+    setLoggedInUser(null);
+    showLogin();
+  };
+
+  // Arkadaş ekleme
+  addFriendBtn.onclick = () => {
+    const friendUsername = friendUsernameInput.value.trim().toLowerCase();
+    if(!friendUsername) {
+      alert('Lütfen bir kullanıcı adı yazın.');
+      return;
+    }
+
+    const loggedInUser = getLoggedInUser();
+    if(!loggedInUser) {
+      alert('Lütfen önce giriş yapın!');
+      showLogin();
+      return;
+    }
+
+    if(friendUsername === loggedInUser.username) {
+      alert('Kendinizi arkadaş olarak ekleyemezsiniz.');
+      return;
+    }
+
+    const users = getUsers();
+    if(!users[friendUsername]) {
+      alert('Böyle bir kullanıcı yok.');
+      return;
+    }
+
+    // Arkadaş ekleme (iki taraflı)
+    if(!users[loggedInUser.username].friends.includes(friendUsername)) {
+      users[loggedInUser.username].friends.push(friendUsername);
+    }
+    if(!users[friendUsername].friends.includes(loggedInUser.username)) {
+      users[friendUsername].friends.push(loggedInUser.username);
+    }
+    saveUsers(users);
+
+    alert(friendUsername + ' arkadaş olarak eklendi.');
+
+    // Güncelle arkadaş listesi
+    renderFriends(loggedInUser);
+    friendUsernameInput.value = '';
+  };
+
+  // Arkadaş listesini çiz
+  function renderFriends(user) {
+    const users = getUsers();
+    const userData = users[user.username];
+    if(!userData || !userData.friends) {
+      friendsListDiv.innerHTML = '<i>Arkadaşınız yok.</i>';
+      return;
+    }
+    friendsListDiv.innerHTML = '';
+    userData.friends.forEach(friend => {
+      const div = document.createElement('div');
+      div.textContent = friend;
+      div.onclick = () => {
+        // Arkadaş seçildiğinde mesajları göster
+        renderMessages(user.username, friend);
+      };
+      friendsListDiv.appendChild(div);
+    });
   }
-};
+
+  let currentChatFriend = null;
+
+  // Mesajları göster
+  function renderMessages(myUsername, friendUsername) {
+    currentChatFriend = friendUsername;
+    chatArea.innerHTML = '';
+    if(!friendUsername) {
+      chatArea.innerHTML = '<i>Bir arkadaş seçin ya da mesajlaşmak için arkadaş ekleyin.</i>';
+      return;
+    }
+
+    const messages = getMessages();
+
+    // Seçilen arkadaş ile olan mesajları filtrele
+    const filtered = messages.filter(m =>
+      (m.from === myUsername && m.to === friendUsername) ||
+      (m.from === friendUsername && m.to === myUsername)
+    );
+
+    if(filtered.length === 0) {
+      chatArea.innerHTML = '<i>Henüz mesaj yok.</i>';
+      return;
+    }
+
+    filtered.forEach(m => {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message');
+
+      const sender = document.createElement('b');
+      sender.textContent = m.from === myUsername ? 'Sen' : m.from;
+      msgDiv.appendChild(sender);
+
+      const time = new Date(m.timestamp).toLocaleString();
+      const timeSpan = document.createElement('small');
+      timeSpan.style.marginLeft = '10px';
+      timeSpan.style.color = '#0ff7';
+      timeSpan.textContent = time;
+      msgDiv.appendChild(timeSpan);
+
+      if(m.note) {
+        const noteP = document.createElement('p');
+        noteP.textContent = m.note;
+        msgDiv.appendChild(noteP);
+      }
+      if(m.photoDataUrl) {
+        const img = document.createElement('img');
+        img.src = m.photoDataUrl;
+        msgDiv.appendChild(img);
+      }
+
+      chatArea.appendChild(msgDiv);
+    });
+
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  // Mesaj gönder
+  sendMsgBtn.onclick = () => {
+    const loggedInUser = getLoggedInUser();
+    if(!loggedInUser) {
+      alert('Lütfen önce giriş yapın!');
+      showLogin();
+      return;
+    }
+
+    if(!currentChatFriend) {
+      alert('Lütfen mesajlaşmak için bir arkadaş seçin.');
+      return;
+    }
+
+    const note = noteInput.value.trim();
+    const photoFile = photoInput.files[0];
+
+    if(!note && !photoFile) {
+      alert('Lütfen bir not yazın veya fotoğraf seçin.');
+      return;
+    }
+
+    if(photoFile) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        sendMessage(loggedInUser.username, currentChatFriend, note, e.target.result);
+      };
+      reader.readAsDataURL(photoFile);
+    } else {
+      sendMessage(loggedInUser.username, currentChatFriend, note, null);
+    }
+  };
+
+  function sendMessage(from, to, note, photoDataUrl) {
+    const messages = getMessages();
+    messages.push({
+      from, to, note, photoDataUrl,
+      timestamp: Date.now()
+    });
+    saveMessages(messages);
+    renderMessages(from, to);
+    noteInput.value = '';
+    photoInput.value = '';
+  }
+
+  // Sayfa yüklendiğinde otomatik giriş kontrolü
+  window.onload = () => {
+    autoLogin();
+  };
+})();
 </script>
 
 </body>
