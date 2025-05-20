@@ -1,128 +1,141 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#121212">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sevgilime Özel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ana</title>
   <style>
     body {
-        height: 100vh;
-        width: 100vw;
-        margin: 0;
-        padding: 0;
-        background-color: rgb(19, 20, 22);
-        font-family: "Lucida Console", "Courier New", monospace;
-        color: white;
-        overflow-x: hidden;
-        position: relative;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: white;
+      font-family: "Lucida Console", "Courier New", monospace;
+      overflow-x: hidden;
+      position: relative;
     }
+
     h1 {
-        text-align: center;
-        margin-top: 30px;
-        color: #f37055;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      text-align: center;
+      margin-top: 30px;
+      color: #f37055;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
+
     p {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 0 20px;
-        font-size: 18px;
-        line-height: 1.7;
-        text-align: justify;
-        color: #f0f0f0;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-size: 18px;
+      line-height: 1.7;
+      text-align: justify;
+      color: #f0f0f0;
     }
+
     .gallery {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: center;
-        padding: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      padding: 30px;
     }
+
     .photo-card {
+      width: 300px;
+      background: transparent;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      position: relative;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .photo-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    .photo-card:hover img {
+      filter: brightness(1.1);
+    }
+
+    .photo-card .caption {
+      display: none;
+    }
+
+    .heart {
+      position: fixed;
+      pointer-events: none;
+      animation: float 6s linear infinite;
+      z-index: 999;
+      font-size: 24px;
+      will-change: transform;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.7; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .photo-card {
         width: 100%;
         max-width: 300px;
-        background: transparent;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        transition: transform 0.3s ease;
-    }
-    .photo-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-    }
-    .photo-card img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        display: block;
-        transition: filter 0.3s ease;
-    }
-    .photo-card:hover img {
-        filter: brightness(1.1);
-    }
-    .heart {
-        position: fixed;
-        pointer-events: none;
-        animation: float 6s linear infinite;
-        z-index: 999;
-        font-size: 24px;
-        will-change: transform;
-    }
-    @keyframes float {
-        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-        10% { opacity: 0.7; }
-        90% { opacity: 0.7; }
-        100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+      }
     }
   </style>
 </head>
 <body>
+
   <h1>SELAM AŞKIM</h1>
-  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin...</p>
+
+  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya "yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur." Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
 
   <div class="gallery">
     <div class="photo-card">
-      <img src="static/images/IMG_1201.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1201.jpg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1202.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1225.jpeg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1203.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1325.jpeg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1204.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1849.jpeg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1205.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1924.jpeg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1206.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1928.jpeg?raw=true">
     </div>
     <div class="photo-card">
-      <img src="static/images/IMG_1207.jpg" loading="lazy">
-    </div>
-    <div class="photo-card">
-      <img src="static/images/IMG_1208.jpg" loading="lazy">
-    </div>
-    <div class="photo-card">
-      <img src="static/images/IMG_1209.jpg" loading="lazy">
-    </div>
-    <div class="photo-card">
-      <img src="static/images/IMG_1210.jpg" loading="lazy">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg?raw=true">
     </div>
   </div>
 
   <script>
+    // Gelişmiş kalp animasyonu
     function createHearts() {
       const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
       const heartCount = 12;
       
+      // Önceki kalpleri temizle
       document.querySelectorAll('.heart').forEach(heart => heart.remove());
       
+      // Kalpleri oluştur
       for (let i = 0; i < heartCount; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -136,6 +149,7 @@
       }
     }
 
+    // Sayfa yüklendiğinde ve boyut değiştiğinde kalpleri oluştur
     window.addEventListener('load', createHearts);
     window.addEventListener('resize', () => {
       if (!window.resizeTimeout) {
@@ -144,6 +158,14 @@
           window.resizeTimeout = null;
         }, 200);
       }
+    });
+
+    // Fotoğraf büyütme
+    document.querySelectorAll('.photo-card').forEach(card => {
+      card.addEventListener('click', function() {
+        this.classList.toggle('zoomed');
+        document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : '';
+      });
     });
   </script>
 </body>
