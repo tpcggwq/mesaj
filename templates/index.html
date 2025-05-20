@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="tr">
-<!-- HEAD KISMI AYNEN KALDI (style vs. değişmedi) -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,7 +7,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Sevgilime Özel</title>
   <style>
-    /* STYLE KISMI TAMAMEN AYNI */
     body {
         height: 100vh;
         width: 100vw;
@@ -20,34 +18,104 @@
         overflow-x: hidden;
         position: relative;
     }
-    /* ... Diğer CSS kuralları aynen kaldı ... */
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+        color: #f37055;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    p {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        font-size: 18px;
+        line-height: 1.7;
+        text-align: justify;
+        color: #f0f0f0;
+    }
+    .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        padding: 30px;
+    }
+    .photo-card {
+        width: 100%;
+        max-width: 300px;
+        background: transparent;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+    }
+    .photo-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+    .photo-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        transition: filter 0.3s ease;
+    }
+    .photo-card:hover img {
+        filter: brightness(1.1);
+    }
+    .heart {
+        position: fixed;
+        pointer-events: none;
+        animation: float 6s linear infinite;
+        z-index: 999;
+        font-size: 24px;
+        will-change: transform;
+    }
+    @keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.7; }
+        90% { opacity: 0.7; }
+        100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
-
   <h1>SELAM AŞKIM</h1>
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin...</p>
 
-  <!-- GALERİ KISMI (MANUEL EKLENDİ) -->
   <div class="gallery">
-    <!-- Örnek 1 -->
     <div class="photo-card">
-      <img src="static/images/IMG_1201.jpg">
+      <img src="static/images/IMG_1201.jpg" loading="lazy">
     </div>
-    
-    <!-- Örnek 2 -->
     <div class="photo-card">
-      <img src="static/images/IMG_1202.jpg">
+      <img src="static/images/IMG_1202.jpg" loading="lazy">
     </div>
-    
-    <!-- Örnek 3 -->
     <div class="photo-card">
-      <img src="static/images/IMG_1203.jpg">
+      <img src="static/images/IMG_1203.jpg" loading="lazy">
     </div>
-    
+    <div class="photo-card">
+      <img src="static/images/IMG_1204.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1205.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1206.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1207.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1208.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1209.jpg" loading="lazy">
+    </div>
+    <div class="photo-card">
+      <img src="static/images/IMG_1210.jpg" loading="lazy">
+    </div>
   </div>
 
-  <!-- SCRIPT KISMI AYNI KALDI -->
   <script>
     function createHearts() {
       const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
