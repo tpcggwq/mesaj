@@ -1,19 +1,236 @@
-input, button, textarea {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px 12px; /* Kenarlara biraz daha dengeli boşluk */
-  border-radius: 6px;
-  border: none;
-  font-size: 1rem;
+/* Reset */
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#chat-area {
-  padding: 10px 12px; /* İçerik ile kenar arasındaki boşluğu eşitledik */
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-#friends-list div {
-  padding: 8px 12px; /* Yatay padding artırıldı */
-  border-bottom: 1px solid #0ff4;
+.container {
+  background: #1f1f38;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+header {
+  background: #29294d;
+  padding: 20px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+.card {
+  background: #29294d;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #bbb;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 10px 0;
   cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab.active,
+.tab:hover {
+  color: #fff;
+  border-color: #7f53ac;
+}
+
+.form {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form.active {
+  display: flex;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  background: #444466;
+  color: #eee;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="text"]::placeholder {
+  color: #ccc;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  background: #6659a8;
+}
+
+.btn {
+  background: #7f53ac;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  user-select: none;
+}
+
+.btn:hover {
+  background: #9b78c8;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#app-section {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#friends-list {
+  list-style: none;
+  overflow-y: auto;
+  max-height: 300px;
+  background: #383866;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+#friends-list li {
+  padding: 10px;
+  border-bottom: 1px solid #555588;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#friends-list li:hover,
+#friends-list li.active {
+  background: #7f53ac;
+  color: #fff;
+  font-weight: 700;
+}
+
+.chat-panel {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+#chat-with {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  user-select: none;
+}
+
+#messages {
+  flex: 1;
+  background: #383866;
+  border-radius: 8px;
+  padding: 15px;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.message {
+  margin-bottom: 15px;
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 12px;
+  word-wrap: break-word;
+}
+
+.message.sent {
+  background: #7f53ac;
+  margin-left: auto;
+  color: #fff;
+}
+
+.message.received {
+  background: #555588;
+  color: #ddd;
+}
+
+#message-form {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: #444466;
+  color: #eee;
+}
+
+#message-input::placeholder {
+  color: #ccc;
+}
+
+@media (max-width: 700px) {
+  #app-section {
+    flex-direction: column;
+  }
+  .sidebar,
+  .chat-panel {
+    width: 100%;
+  }
+  .chat-panel {
+    height: 400px;
+  }
 }
