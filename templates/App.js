@@ -1,387 +1,276 @@
-// Elementleri seç
-const formContainer = document.getElementById('form-container');
-const formTitle = document.getElementById('form-title');
+// app.js
+
+// Elementler
+const loginContainer = document.getElementById('login-container');
+const chatContainer = document.getElementById('chat-container');
+
+const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
-const rememberCheckbox = document.getElementById('remember');
-const submitBtn = document.getElementById('submit-btn');
-const switchBtn = document.getElementById('switch-btn');
 
-let isLogin = true;
+const loginBtn = document.getElementById('login-btn');
+const registerBtn = document.getElementById('register-btn');
 
-// Giriş yapmış kullanıcı (sessionStorage'dan)
-let loggedInUser = null;
+const userNameDisplay = document.getElementById('user-name');
+const logoutBtn = document.getElementById('logout-btn');
 
-// Kayıtlı kullanıcılar localStorage'da email (kullanıcı adı) ile saklanıyor
-// Kullanıcı objesi: { password, friends: [], messages: { friendUsername: [{text, photo, note, from, timestamp}] } }
+const friendUsernameInput = document.getElementById('friend-username');
+const addFriendBtn = document.getElementById('add-friend-btn');
+const friendsListDiv = document.getElementById('friends-list');
 
-// Sayfa yüklendiğinde hatırlanan bilgileri doldur
-window.onload = () => {
-  const rememberedEmail = localStorage.getItem('rememberedEmail');
-  const rememberedPass = localStorage.getItem('rememberedPass');
-  if (rememberedEmail && rememberedPass) {
-    emailInput.value = rememberedEmail;
-    passwordInput.value = rememberedPass;
-    rememberCheckbox.checked = true;
-  }
-  // Eğer sessionStorage'da kullanıcı varsa direkt mesajlaşma ekranına geç
-  const sessionUser = sessionStorage.getItem('loggedInUser');
-  if (sessionUser) {
-    loggedInUser = sessionUser;
-    showChatUI();
-  }
-};
+const chatArea = document.getElementById('chat-area');
+const noteInput = document.getElementById('note-input');
+const photoInput = document.getElementById('photo-input');
+const sendMsgBtn = document.getElementById('send-msg-btn');
 
-// Form tipini değiştir (Giriş/Kayıt)
-switchBtn.onclick = () => {
-  isLogin = !isLogin;
-  if (isLogin) {
-    formTitle.textContent = 'Giriş Yap';
-    submitBtn.textContent = 'Giriş Yap';
-    switchBtn.textContent = 'Kayıt Ol';
-  } else {
-    formTitle.textContent = 'Kayıt Ol';
-    submitBtn.textContent = 'Kayıt Ol';
-    switchBtn.textContent = 'Giriş Yap';
-  }
-  emailInput.value = '';
-  passwordInput.value = '';
-  rememberCheckbox.checked = false;
-};
+// Global değişkenler
+let currentUser = null;
+let friends = [];
+let activeFriend = null;
 
-// Giriş veya kayıt işlemi
-submitBtn.onclick = () => {
-  const username = emailInput.value.trim().toLowerCase();
+// Yerel depolama anahtarları
+function getUserKey(username) {
+  return 'user_' + username.toLowerCase();
+}
+
+function saveUser(user) {
+  localStorage.setItem(getUserKey(user.username), JSON.stringify(user));
+}
+
+function loadUser(username) {
+  const data = localStorage.getItem(getUserKey(username));
+  return data ? JSON.parse(data) : null;
+}
+
+// Kayıt ol
+registerBtn.onclick = () => {
+  const username = usernameInput.value.trim().toLowerCase();
+  const email = emailInput.value.trim().toLowerCase();
   const password = passwordInput.value;
 
-  if (!username || !password) {
+  if (!username || !email || !password) {
     alert('Lütfen tüm alanları doldurun!');
     return;
   }
 
-  if (isLogin) {
-    // Giriş
-    const userStr = localStorage.getItem(username);
-    if (!userStr) {
-      alert('Böyle bir kullanıcı bulunamadı!');
-      return;
-    }
-    const user = JSON.parse(userStr);
-    if (user.password !== password) {
-      alert('Şifre yanlış!');
-      return;
-    }
-    loggedInUser = username;
-    sessionStorage.setItem('loggedInUser', username);
+  if (loadUser(username)) {
+    alert('Bu kullanıcı adı zaten kayıtlı!');
+    return;
+  }
 
-    if (rememberCheckbox.checked) {
-      localStorage.setItem('rememberedEmail', username);
-      localStorage.setItem('rememberedPass', password);
-    } else {
-      localStorage.removeItem('rememberedEmail');
-      localStorage.removeItem('rememberedPass');
-    }
+  if (password.length < 6) {
+    alert('Şifre en az 6 karakter olmalı!');
+    return;
+  }
 
-    alert('Giriş başarılı!');
-    showChatUI();
+  const newUser = {
+    username,
+    email,
+    password,
+    friends: [],
+    messages: {}  // Arkadaşlara ait mesajlar için
+  };
 
-  } else {
-    // Kayıt
-    if (localStorage.getItem(username)) {
-      alert('Bu kullanıcı zaten kayıtlı!');
-      return;
-    }
-    if (password.length < 6) {
-      alert('Şifre en az 6 karakter olmalı!');
-      return;
-    }
-    const newUser = {
-      password: password,
-      friends: [],
-      messages: {}
+  saveUser(newUser);
+  alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+  clearLoginFields();
+};
+
+// Giriş yap
+loginBtn.onclick = () => {
+  const username = usernameInput.value.trim().toLowerCase();
+  const password = passwordInput.value;
+
+  if (!username || !password) {
+    alert('Lütfen kullanıcı adı ve şifre girin!');
+    return;
+  }
+
+  const user = loadUser(username);
+  if (!user) {
+    alert('Kullanıcı bulunamadı!');
+    return;
+  }
+
+  if (user.password !== password) {
+    alert('Şifre yanlış!');
+    return;
+  }
+
+  currentUser = user;
+  friends = currentUser.friends || [];
+  showChatUI();
+  renderFriendsList();
+};
+
+// Çıkış yap
+logoutBtn.onclick = () => {
+  currentUser = null;
+  friends = [];
+  activeFriend = null;
+  chatArea.innerHTML = '';
+  clearLoginFields();
+  chatContainer.style.display = 'none';
+  loginContainer.style.display = 'block';
+};
+
+// Arkadaş listesi göster
+function renderFriendsList() {
+  friendsListDiv.innerHTML = '';
+  if (friends.length === 0) {
+    friendsListDiv.innerHTML = '<p>Henüz arkadaşınız yok.</p>';
+    return;
+  }
+  friends.forEach(friend => {
+    const div = document.createElement('div');
+    div.textContent = friend;
+    div.style.cursor = 'pointer';
+    div.onclick = () => {
+      activeFriend = friend;
+      renderChatMessages();
     };
-    localStorage.setItem(username, JSON.stringify(newUser));
-    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
-    switchBtn.click();
+    friendsListDiv.appendChild(div);
+  });
+}
+
+// Arkadaş ekle
+addFriendBtn.onclick = () => {
+  const friendUsername = friendUsernameInput.value.trim().toLowerCase();
+  if (!friendUsername) return alert('Lütfen kullanıcı adı girin.');
+
+  if (friendUsername === currentUser.username) {
+    return alert('Kendinizi arkadaş olarak ekleyemezsiniz!');
+  }
+
+  const friendUser = loadUser(friendUsername);
+  if (!friendUser) {
+    return alert('Böyle bir kullanıcı yok!');
+  }
+
+  if (friends.includes(friendUsername)) {
+    return alert('Bu kullanıcı zaten arkadaş listenizde!');
+  }
+
+  friends.push(friendUsername);
+  currentUser.friends = friends;
+  saveUser(currentUser);
+
+  // Karşı tarafa da seni ekle (ters yönlü)
+  if (!friendUser.friends.includes(currentUser.username)) {
+    friendUser.friends.push(currentUser.username);
+    saveUser(friendUser);
+  }
+
+  friendUsernameInput.value = '';
+  renderFriendsList();
+};
+
+// Mesaj gönder
+sendMsgBtn.onclick = () => {
+  if (!activeFriend) {
+    alert('Lütfen bir arkadaş seçin!');
+    return;
+  }
+
+  const note = noteInput.value.trim();
+  const file = photoInput.files[0];
+
+  if (!note && !file) {
+    alert('Mesaj veya fotoğraf girin!');
+    return;
+  }
+
+  const timestamp = Date.now();
+
+  // Mesaj objesi
+  const msg = {
+    from: currentUser.username,
+    to: activeFriend,
+    note,
+    photo: null,
+    timestamp
+  };
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      msg.photo = e.target.result;
+
+      saveMessage(msg);
+      noteInput.value = '';
+      photoInput.value = '';
+      renderChatMessages();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    saveMessage(msg);
+    noteInput.value = '';
+    renderChatMessages();
   }
 };
 
-// Mesajlaşma arayüzü elementleri (sonradan oluşturulacak)
-let chatContainer, friendListDiv, chatAreaDiv, messageInput, sendBtn, photoInput, noteInput, addFriendInput, addFriendBtn, logoutBtn;
-let currentChatFriend = null;
+function saveMessage(msg) {
+  // currentUser.messages içinde activeFriend için array olacak
+  if (!currentUser.messages[msg.to]) currentUser.messages[msg.to] = [];
+  currentUser.messages[msg.to].push(msg);
 
-// Mesajlaşma UI oluştur ve göster
+  // Aynı mesajı arkadaşın messagesına da ekle
+  const friendUser = loadUser(msg.to);
+  if (!friendUser.messages[msg.from]) friendUser.messages[msg.from] = [];
+  friendUser.messages[msg.from].push(msg);
+
+  saveUser(currentUser);
+  saveUser(friendUser);
+}
+
+// Mesajları göster
+function renderChatMessages() {
+  chatArea.innerHTML = '';
+  if (!activeFriend) {
+    chatArea.innerHTML = '<p>Lütfen bir arkadaş seçin.</p>';
+    return;
+  }
+
+  // currentUser.messages[activeFriend] ve arkadaşın mesajları
+  const msgs1 = currentUser.messages[activeFriend] || [];
+  const friendUser = loadUser(activeFriend);
+  const msgs2 = friendUser.messages[currentUser.username] || [];
+
+  // İki tarafın mesajlarını tarihe göre birleştir
+  const allMsgs = msgs1.concat(msgs2);
+  allMsgs.sort((a, b) => a.timestamp - b.timestamp);
+
+  allMsgs.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'message';
+    div.style.borderBottom = '1px dotted #0ff';
+    div.style.paddingBottom = '8px';
+    div.innerHTML = `<b>${m.from === currentUser.username ? 'Sen' : m.from}</b>: ${m.note ? m.note : ''}`;
+    if (m.photo) {
+      const img = document.createElement('img');
+      img.src = m.photo;
+      div.appendChild(img);
+    }
+    chatArea.appendChild(div);
+  });
+
+  // Scroll sonuna kaydır
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function clearLoginFields() {
+  usernameInput.value = '';
+  emailInput.value = '';
+  passwordInput.value = '';
+}
+
 function showChatUI() {
-  formContainer.style.display = 'none';
-
-  // Ana container
-  chatContainer = document.createElement('div');
-  chatContainer.style.display = 'flex';
-  chatContainer.style.height = '90vh';
-  chatContainer.style.width = '90vw';
-  chatContainer.style.margin = '20px auto';
-  chatContainer.style.background = '#111f3d';
-  chatContainer.style.borderRadius = '12px';
-  chatContainer.style.color = '#0ff';
-  chatContainer.style.boxShadow = '0 0 30px #0ff5';
-
-  // Sol panel - arkadaş listesi
-  friendListDiv = document.createElement('div');
-  friendListDiv.style.width = '25%';
-  friendListDiv.style.borderRight = '2px solid #0ff';
-  friendListDiv.style.padding = '10px';
-  friendListDiv.style.overflowY = 'auto';
-
-  // Başlık ve çıkış butonu
-  const title = document.createElement('h2');
-  title.textContent = `Hoşgeldin, ${loggedInUser}`;
-  title.style.textAlign = 'center';
-
-  logoutBtn = document.createElement('button');
-  logoutBtn.textContent = 'Çıkış Yap';
-  logoutBtn.style.width = '100%';
-  logoutBtn.style.padding = '8px';
-  logoutBtn.style.marginBottom = '10px';
-  logoutBtn.style.cursor = 'pointer';
-  logoutBtn.onclick = () => {
-    sessionStorage.removeItem('loggedInUser');
-    location.reload();
-  };
-
-  // Arkadaş ekleme
-  addFriendInput = document.createElement('input');
-  addFriendInput.placeholder = 'Arkadaş kullanıcı adı ekle';
-  addFriendInput.style.width = '70%';
-  addFriendInput.style.padding = '5px';
-  addFriendInput.style.marginBottom = '10px';
-  addFriendInput.style.borderRadius = '6px';
-  addFriendInput.style.border = 'none';
-  addFriendInput.style.fontSize = '1rem';
-
-  addFriendBtn = document.createElement('button');
-  addFriendBtn.textContent = 'Ekle';
-  addFriendBtn.style.width = '28%';
-  addFriendBtn.style.marginLeft = '2%';
-  addFriendBtn.style.padding = '5px';
-  addFriendBtn.style.cursor = 'pointer';
-
-  const addFriendDiv = document.createElement('div');
-  addFriendDiv.style.display = 'flex';
-  addFriendDiv.appendChild(addFriendInput);
-  addFriendDiv.appendChild(addFriendBtn);
-
-  friendListDiv.appendChild(title);
-  friendListDiv.appendChild(logoutBtn);
-  friendListDiv.appendChild(addFriendDiv);
-
-  // Arkadaş listesi gösterim alanı
-  const friendsUl = document.createElement('ul');
-  friendsUl.style.listStyle = 'none';
-  friendsUl.style.padding = '0';
-  friendListDiv.appendChild(friendsUl);
-
-  // Sağ panel - mesajlaşma alanı
-  chatAreaDiv = document.createElement('div');
-  chatAreaDiv.style.flexGrow = '1';
-  chatAreaDiv.style.padding = '10px';
-  chatAreaDiv.style.display = 'flex';
-  chatAreaDiv.style.flexDirection = 'column';
-  chatAreaDiv.style.justifyContent = 'space-between';
-
-  // Chat başlığı
-  const chatTitle = document.createElement('h3');
-  chatTitle.textContent = 'Arkadaşını seç ve sohbet et';
-  chatTitle.style.textAlign = 'center';
-  chatAreaDiv.appendChild(chatTitle);
-
-  // Mesajlar için div
-  const messagesDiv = document.createElement('div');
-  messagesDiv.style.flexGrow = '1';
-  messagesDiv.style.overflowY = 'auto';
-  messagesDiv.style.border = '1px solid #0ff';
-  messagesDiv.style.borderRadius = '10px';
-  messagesDiv.style.padding = '10px';
-  messagesDiv.style.marginBottom = '10px';
-  messagesDiv.style.background = '#001122';
-  chatAreaDiv.appendChild(messagesDiv);
-
-  // Mesaj yazma alanı (foto + not + gönder)
-  const messageForm = document.createElement('form');
-  messageForm.style.display = 'flex';
-  messageForm.style.gap = '10px';
-
-  // Fotoğraf yükleme inputu
-  photoInput = document.createElement('input');
-  photoInput.type = 'file';
-  photoInput.accept = 'image/*';
-  photoInput.style.flexBasis = '20%';
-
-  // Not inputu
-  noteInput = document.createElement('input');
-  noteInput.type = 'text';
-  noteInput.placeholder = 'Mesaj veya not yaz...';
-  noteInput.style.flexGrow = '1';
-  noteInput.required = true;
-
-  // Gönder butonu
-  sendBtn = document.createElement('button');
-  sendBtn.type = 'submit';
-  sendBtn.textContent = 'Gönder';
-  sendBtn.style.flexBasis = '20%';
-
-  messageForm.appendChild(photoInput);
-  messageForm.appendChild(noteInput);
-  messageForm.appendChild(sendBtn);
-
-  chatAreaDiv.appendChild(messageForm);
-
-  document.body.appendChild(chatContainer);
-  chatContainer.appendChild(friendListDiv);
-  chatContainer.appendChild(chatAreaDiv);
-
-  // Kullanıcının arkadaş listesini getir ve listele
-  const user = JSON.parse(localStorage.getItem(loggedInUser));
-  const friends = user.friends || [];
-
-  function refreshFriendsList() {
-    friendsUl.innerHTML = '';
-    friends.forEach(friend => {
-      const li = document.createElement('li');
-      li.textContent = friend;
-      li.style.cursor = 'pointer';
-      li.style.padding = '5px';
-      li.style.borderBottom = '1px solid #0ff';
-      li.onclick = () => openChatWith(friend);
-      friendsUl.appendChild(li);
-    });
-  }
-  refreshFriendsList();
-
-  // Arkadaş ekleme fonksiyonu
-  addFriendBtn.onclick = (e) => {
-    e.preventDefault();
-    const newFriend = addFriendInput.value.trim().toLowerCase();
-    if (newFriend === loggedInUser) {
-      alert('Kendini arkadaş olarak ekleyemezsin!');
-      return;
-    }
-    if (!newFriend) {
-      alert('Lütfen bir kullanıcı adı girin.');
-      return;
-    }
-    if (!localStorage.getItem(newFriend)) {
-      alert('Böyle bir kullanıcı bulunamadı!');
-      return;
-    }
-    if (friends.includes(newFriend)) {
-      alert('Bu kullanıcı zaten arkadaş listende.');
-      return;
-    }
-    friends.push(newFriend);
-    user.friends = friends;
-    localStorage.setItem(loggedInUser, JSON.stringify(user));
-    refreshFriendsList();
-    addFriendInput.value = '';
-    alert('Arkadaş eklendi!');
-  };
-
-  // Chat açma fonksiyonu
-  function openChatWith(friend) {
-    currentChatFriend = friend;
-    chatTitle.textContent = `Sohbet: ${friend}`;
-    messagesDiv.innerHTML = '';
-
-    const messages = (user.messages && user.messages[friend]) || [];
-
-    messages.forEach(msg => {
-      const msgDiv = document.createElement('div');
-      msgDiv.style.marginBottom = '10px';
-      msgDiv.style.borderBottom = '1px solid #0ff';
-
-      const fromText = msg.from === loggedInUser ? 'Sen' : friend;
-      const time = new Date(msg.timestamp).toLocaleTimeString();
-
-      if (msg.photo) {
-        const img = document.createElement('img');
-        img.src = msg.photo;
-        img.style.maxWidth = '100px';
-        img.style.display = 'block';
-        img.style.marginBottom = '5px';
-        msgDiv.appendChild(img);
-      }
-
-      const noteP = document.createElement('p');
-      noteP.textContent = `${fromText} (${time}): ${msg.note}`;
-      msgDiv.appendChild(noteP);
-
-      messagesDiv.appendChild(msgDiv);
-    });
-
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-
-  // Mesaj gönderme
-  messageForm.onsubmit = (e) => {
-    e.preventDefault();
-    if (!currentChatFriend) {
-      alert('Lütfen önce bir arkadaş seçin!');
-      return;
-    }
-    const note = noteInput.value.trim();
-    if (!note) {
-      alert('Mesaj veya not boş olamaz!');
-      return;
-    }
-
-    // Foto varsa oku base64 olarak
-    if (photoInput.files.length > 0) {
-      const file = photoInput.files[0];
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        saveMessage(evt.target.result, note);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      saveMessage(null, note);
-    }
-  };
-
-  // Mesaj kaydetme fonksiyonu
-  function saveMessage(photoBase64, note) {
-    const timestamp = Date.now();
-
-    // Gönderen kullanıcı objesi ve mesajlar
-    const senderUser = JSON.parse(localStorage.getItem(loggedInUser));
-    if (!senderUser.messages) senderUser.messages = {};
-    if (!senderUser.messages[currentChatFriend]) senderUser.messages[currentChatFriend] = [];
-
-    // Alıcı kullanıcı objesi ve mesajlar
-    const receiverUser = JSON.parse(localStorage.getItem(currentChatFriend));
-    if (!receiverUser.messages) receiverUser.messages = {};
-    if (!receiverUser.messages[loggedInUser]) receiverUser.messages[loggedInUser] = [];
-
-    // Mesaj objesi
-    const msgObj = {
-      from: loggedInUser,
-      photo: photoBase64,
-      note,
-      timestamp
-    };
-
-    // Gönderenin mesajlarına ekle
-    senderUser.messages[currentChatFriend].push(msgObj);
-    // Alıcının mesajlarına ekle
-    receiverUser.messages[loggedInUser].push(msgObj);
-
-    // Güncelle localStorage
-    localStorage.setItem(loggedInUser, JSON.stringify(senderUser));
-    localStorage.setItem(currentChatFriend, JSON.stringify(receiverUser));
-
-    // Mesaj kutusunu temizle
-    noteInput.value = '';
-    photoInput.value = '';
-
-    // Mesajı göster
-    openChatWith(currentChatFriend);
-  }
+  loginContainer.style.display = 'none';
+  chatContainer.style.display = 'block';
+  userNameDisplay.textContent = currentUser.username;
+  friendUsernameInput.value = '';
+  noteInput.value = '';
+  photoInput.value = '';
+  activeFriend = null;
+  chatArea.innerHTML = '<p>Arkadaş listenden birini seçip mesajlaşmaya başlayabilirsin.</p>';
 }
