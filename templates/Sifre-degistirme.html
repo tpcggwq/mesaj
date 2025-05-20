@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Şifre Değiştir</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #0ff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .change-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #0ff5;
+      width: 320px;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #222;
+      border: none;
+      color: #0ff;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background: #0ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .link {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="change-box">
+  <h2>Şifre Değiştir</h2>
+  <input type="password" id="oldPass" placeholder="Mevcut Şifreniz" />
+  <input type="password" id="newPass" placeholder="Yeni Şifre" />
+  <input type="password" id="newPassConfirm" placeholder="Yeni Şifre (Tekrar)" />
+  <button onclick="changePassword()">Şifreyi Güncelle</button>
+  <div class="link" onclick="goBack()">Geri Dön</div>
+</div>
+
+<script>
+  // Kullanıcı giriş yapmış mı kontrol et
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Lütfen önce giriş yapın!");
+    window.location.href = "giris.html";
+  }
+
+  function changePassword() {
+    const oldPass = document.getElementById("oldPass").value;
+    const newPass = document.getElementById("newPass").value;
+    const newPassConfirm = document.getElementById("newPassConfirm").value;
+
+    if (!oldPass || !newPass || !newPassConfirm) {
+      alert("Lütfen tüm alanları doldurun.");
+      return;
+    }
+    if (newPass !== newPassConfirm) {
+      alert("Yeni şifreler uyuşmuyor!");
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem(loggedInUser));
+    if (!user) {
+      alert("Kullanıcı bulunamadı!");
+      window.location.href = "giris.html";
+      return;
+    }
+
+    if (user.password !== oldPass) {
+      alert("Mevcut şifre yanlış!");
+      return;
+    }
+
+    // Şifreyi güncelle
+    user.password = newPass;
+    localStorage.setItem(loggedInUser, JSON.stringify(user));
+    alert("Şifreniz başarıyla güncellendi!");
+
+    // Eğer "bu cihazı hatırla" aktifse localStorage'daki şifreyi de güncelle
+    if (localStorage.getItem("remember") === "true" && localStorage.getItem("email") === loggedInUser) {
+      localStorage.setItem("password", newPass);
+    }
+
+    goBack();
+  }
+
+  function goBack() {
+    window.location.href = "giris.html";
+  }
+</script>
+
+</body>
+</html>
