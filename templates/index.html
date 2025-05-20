@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mesajlaşma Sistemi - Kullanıcı Adı ile</title>
+<title>Mesajlaşma Sistemi</title>
 <style>
   body {
     margin: 0; padding: 0; font-family: Arial, sans-serif; background: #050a15; color: #0ff;
@@ -52,12 +52,6 @@
     display: block;
     margin-top: 5px;
   }
-  #friend-username {
-    margin-top: 20px;
-  }
-  #friends-list {
-    margin-top: 20px;
-  }
   #friends-list div {
     padding: 8px;
     border-bottom: 1px solid #0ff4;
@@ -98,7 +92,214 @@
   <button id="send-msg-btn">Gönder</button>
 </div>
 
-<script src="app.js"></script>
+<script>
+  const loginContainer = document.getElementById('login-container');
+  const chatContainer = document.getElementById('chat-container');
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginBtn = document.getElementById('login-btn');
+  const registerBtn = document.getElementById('register-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const userNameDisplay = document.getElementById('user-name');
+
+  const friendUsernameInput = document.getElementById('friend-username');
+  const addFriendBtn = document.getElementById('add-friend-btn');
+  const friendsListDiv = document.getElementById('friends-list');
+  const chatArea = document.getElementById('chat-area');
+  const noteInput = document.getElementById('note-input');
+  const photoInput = document.getElementById('photo-input');
+  const sendMsgBtn = document.getElementById('send-msg-btn');
+
+  let currentUser = null;
+  let currentFriend = null;
+  let friends = [];
+
+  // Kayıt olma
+  registerBtn.onclick = () => {
+    const username = usernameInput.value.trim().toLowerCase();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
+
+    if (!username || !email || !password) {
+      alert('Lütfen tüm alanları doldurun!');
+      return;
+    }
+    if (localStorage.getItem('user_' + username)) {
+      alert('Bu kullanıcı adı zaten alınmış!');
+      return;
+    }
+
+    const userData = {
+      email,
+      password,
+      friends: [],
+      messages: {} // friendUsername: [ { note, photoDataUrl } ]
+    };
+
+    localStorage.setItem('user_' + username, JSON.stringify(userData));
+    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+  };
+
+  // Giriş yapma
+  loginBtn.onclick = () => {
+    const username = usernameInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      alert('Lütfen kullanıcı adı ve şifre girin!');
+      return;
+    }
+
+    const userStr = localStorage.getItem('user_' + username);
+    if (!userStr) {
+      alert('Kullanıcı bulunamadı!');
+      return;
+    }
+    const user = JSON.parse(userStr);
+    if (user.password !== password) {
+      alert('Şifre yanlış!');
+      return;
+    }
+
+    currentUser = username;
+    friends = user.friends || [];
+    userNameDisplay.textContent = currentUser;
+
+    loginContainer.style.display = 'none';
+    chatContainer.style.display = 'block';
+
+    renderFriends();
+    chatArea.innerHTML = '';
+    currentFriend = null;
+  };
+
+  // Çıkış yapma
+  logoutBtn.onclick = () => {
+    currentUser = null;
+    currentFriend = null;
+    friends = [];
+    chatArea.innerHTML = '';
+    friendsListDiv.innerHTML = '';
+    loginContainer.style.display = 'block';
+    chatContainer.style.display = 'none';
+    usernameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+  };
+
+  // Arkadaşları listele
+  function renderFriends() {
+    friendsListDiv.innerHTML = '';
+    if (friends.length === 0) {
+      friendsListDiv.textContent = 'Henüz arkadaşınız yok.';
+      return;
+    }
+    friends.forEach(friend => {
+      const div = document.createElement('div');
+      div.textContent = friend;
+      div.onclick = () => {
+        currentFriend = friend;
+        loadChat();
+      };
+      friendsListDiv.appendChild(div);
+    });
+  }
+
+  // Arkadaş ekle
+  addFriendBtn.onclick = () => {
+    if (!currentUser) return alert('Önce giriş yapmalısınız!');
+    const friendUsername = friendUsernameInput.value.trim().toLowerCase();
+    if (!friendUsername) return alert('Arkadaş kullanıcı adını girin!');
+    if (friendUsername === currentUser) return alert('Kendinizi arkadaş olarak ekleyemezsiniz!');
+    if (friends.includes(friendUsername)) return alert('Bu kullanıcı zaten arkadaşınız!');
+
+    if (!localStorage.getItem('user_' + friendUsername)) {
+      alert('Böyle bir kullanıcı yok!');
+      return;
+    }
+
+    friends.push(friendUsername);
+    // Güncelle user verisi
+    let userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+    userData.friends = friends;
+    localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+
+    friendUsernameInput.value = '';
+    renderFriends();
+  };
+
+  // Chat yükle
+  function loadChat() {
+    chatArea.innerHTML = '';
+    if (!currentFriend) return;
+    let userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+    const msgs = userData.messages?.[currentFriend] || [];
+    msgs.forEach(msg => {
+      addMessageToChat(msg.note, msg.photoDataUrl, 'friend');
+    });
+  }
+
+  // Mesaj ekle
+  function addMessageToChat(note, photoDataUrl, sender = 'me') {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message');
+    msgDiv.style.textAlign = sender === 'me' ? 'right' : 'left';
+
+    const noteP = document.createElement('p');
+    noteP.textContent = note;
+    msgDiv.appendChild(noteP);
+
+    if (photoDataUrl) {
+      const img = document.createElement('img');
+      img.src = photoDataUrl;
+      msgDiv.appendChild(img);
+    }
+
+    chatArea.appendChild(msgDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  // Mesaj gönder
+  sendMsgBtn.onclick = () => {
+    if (!currentFriend) {
+      alert('Lütfen önce bir arkadaş seçin!');
+      return;
+    }
+
+    const note = noteInput.value.trim();
+    if (!note && photoInput.files.length === 0) {
+      alert('Lütfen bir not yazın veya fotoğraf seçin!');
+      return;
+    }
+
+    const file = photoInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        saveMessage(note, e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveMessage(note, null);
+    }
+  };
+
+  // Mesaj kaydet
+  function saveMessage(note, photoDataUrl) {
+    // Güncel kullanıcı verisi
+    let userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+    if (!userData.messages) userData.messages = {};
+    if (!userData.messages[currentFriend]) userData.messages[currentFriend] = [];
+
+    userData.messages[currentFriend].push({ note, photoDataUrl });
+    localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+
+    addMessageToChat(note, photoDataUrl, 'me');
+    noteInput.value = '';
+    photoInput.value = '';
+  }
+</script>
 
 </body>
 </html>
