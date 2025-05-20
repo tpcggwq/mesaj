@@ -7,16 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Sevgilime Özel</title>
   <style>
-    /* ORİJİNAL CSS KODU (Aynen Korundu) */
     body {
         height: 100vh;
         width: 100vw;
         margin: 0;
         padding: 0;
         background-color: rgb(19, 20, 22);
-         font-family: "Lucida Console", "Courier New", monospace;
+        font-family: "Lucida Console", "Courier New", monospace;
         color: white;
         overflow-x: hidden;
+        position: relative;
     }
 
     h1 {
@@ -91,151 +91,82 @@
         }
     }
 
-    /* YENİ EKLENEN STİLLER */
-    .photo-card.zoomed {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1.8);
-      z-index: 1000;
-      width: 90vw;
-      height: 90vh;
-      max-width: 800px;
-      cursor: zoom-out;
-      animation: zoomIn 0.3s ease-out;
-    }
-
-    @keyframes zoomIn {
-      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1.8); }
-    }
-
-    .floating-hearts {
-      position: fixed;
-      pointer-events: none;
-      z-index: 999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .floating-hearts .heart {
-      position: absolute;
-      animation: float 6s ease-in-out infinite;
-      font-size: 24px;
+    /* KALP ANİMASYONU */
+    .heart {
+        position: fixed;
+        pointer-events: none;
+        animation: float 6s ease-in-out infinite;
+        opacity: 0.7;
+        z-index: 999;
+        user-select: none;
+        font-size: 20px;
     }
 
     @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
-      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+        50% { transform: translateY(-20px) rotate(10deg); opacity: 1; }
+        100% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ORİJİNAL METİN İÇERİĞİ (Aynen Korundu) -->
   <h1>SELAM AŞKIM</h1>
 
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya "yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur." Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
 
   <div class="gallery">
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1201.jpg?raw=true" alt="IMG_1201" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1201.jpg?raw=true" alt="IMG_1201">
       <div class="caption">sana</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1225.jpeg?raw=true" alt="IMG_1225" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1225.jpeg?raw=true" alt="IMG_1225">
       <div class="caption">aşırı</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1325.jpeg?raw=true" alt="IMG_1325" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1325.jpeg?raw=true" alt="IMG_1325">
       <div class="caption">sana</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1849.jpeg?raw=true" alt="IMG_1849" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1849.jpeg?raw=true" alt="IMG_1849">
       <div class="caption">fena</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1924.jpeg?raw=true" alt="IMG_1924" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1924.jpeg?raw=true" alt="IMG_1924">
       <div class="caption">şekilde</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1928.jpeg?raw=true" alt="IMG_1928" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/IMG_1928.jpeg?raw=true" alt="IMG_1928">
       <div class="caption">aşık oldum</div>
     </div>
-    <div class="photo-card" data-zoomable>
-      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg?raw=true" alt="final" loading="lazy" decoding="async">
+    <div class="photo-card">
+      <img src="https://github.com/tpcggwq/mesaj/blob/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg?raw=true" alt="final">
       <div class="caption">iyi ki varsın bebeğim</div>
     </div>
   </div>
 
   <script>
-    // Orijinal JavaScript kodunuz (Aynen korundu)
+    // KALP OLUŞTURMA FONKSİYONU
     function createHearts() {
-      const isMobile = window.innerWidth <= 768;
-      const heartCount = isMobile ? 8 : 15;
       const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
-      
-      document.querySelectorAll('.heart').forEach(heart => heart.remove());
+      const heartCount = 15;
       
       for (let i = 0; i < heartCount; i++) {
         const heart = document.createElement('div');
+        heart.className = 'heart';
         heart.innerHTML = '❤';
-        heart.classList.add('heart');
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.top = Math.random() * 100 + 'vh';
-        heart.style.fontSize = (Math.random() * (isMobile ? 10 : 20) + 8) + 'px';
         heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-        heart.style.animationDelay = Math.random() * 5 + 's';
-        heart.style.willChange = 'transform, opacity';
+        heart.style.fontSize = (10 + Math.random() * 20) + 'px';
+        heart.style.animationDelay = Math.random() * 3 + 's';
         document.body.appendChild(heart);
       }
     }
 
-    // YENİ EKLENEN JAVASCRIPT
-    document.addEventListener('DOMContentLoaded', function() {
-      // Orijinal kalp fonksiyonu
-      createHearts();
-      window.addEventListener('resize', createHearts);
-
-      // Yeni fotoğraf büyütme özelliği
-      const zoomableCards = document.querySelectorAll('[data-zoomable]');
-      let currentZoomedCard = null;
-
-      function toggleZoom(card) {
-        if (currentZoomedCard) {
-          currentZoomedCard.classList.remove('zoomed');
-          document.body.style.overflow = 'auto';
-          currentZoomedCard = null;
-        } else {
-          card.classList.add('zoomed');
-          document.body.style.overflow = 'hidden';
-          currentZoomedCard = card;
-        }
-      }
-
-      zoomableCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-          e.stopPropagation();
-          toggleZoom(this);
-        });
-      });
-
-      // Dışarı tıklayarak kapatma
-      document.addEventListener('click', function(e) {
-        if (currentZoomedCard && !currentZoomedCard.contains(e.target)) {
-          toggleZoom(currentZoomedCard);
-        }
-      });
-
-      // ESC tuşu ile kapatma
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && currentZoomedCard) {
-          toggleZoom(currentZoomedCard);
-        }
-      });
-    });
+    // SAYFA YÜKLENİNCE ÇALIŞTIR
+    window.addEventListener('load', createHearts);
   </script>
 </body>
 </html>
