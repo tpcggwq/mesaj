@@ -118,6 +118,30 @@
         font-size: 22px;
       }
     }
+
+    /* Müzik player container */
+    #musicPlayer {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(255 255 255 / 0.1);
+      padding: 10px 15px;
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1500;
+      user-select: none;
+    }
+
+    #playPauseBtn {
+      background: none;
+      border: none;
+      color: #ff1493;
+      font-size: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -148,9 +172,9 @@
   </div>
 
   <!-- Müzik player -->
-  <div style="position: fixed; bottom: 15px; right: 15px; background: rgba(255 255 255 / 0.1); padding: 10px 15px; border-radius: 20px; backdrop-filter: blur(5px); display: flex; align-items: center; gap: 10px; z-index: 1500;">
+  <div id="musicPlayer">
     <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/26/audio_f123456789.mp3?filename=baby-im-yours-cover-12345.mp3" preload="auto"></audio>
-    <button id="playPauseBtn" style="background: none; border: none; color: #ff1493; font-size: 20px; cursor: pointer;">▶️</button>
+    <button id="playPauseBtn" aria-label="Play/Pause music">▶️</button>
     <span style="color: #ff1493; font-weight: 600;">Baby I'm Yours</span>
   </div>
 
@@ -162,59 +186,4 @@
       heart.innerHTML = '❤';
 
       const size = 20 + Math.random() * 30;
-      const color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
-
-      const moveX = (Math.random() * 2 - 1).toFixed(2);
-      const moveY = (Math.random() * 1 + 0.5).toFixed(2);
-
-      const startX = Math.random();
-      const startY = Math.random();
-
-      heart.style.setProperty('--start-x', startX);
-      heart.style.setProperty('--start-y', startY);
-      heart.style.setProperty('--move-x', moveX);
-      heart.style.setProperty('--move-y', moveY);
-
-      heart.style.fontSize = `${size}px`;
-      heart.style.color = color;
-      heart.style.textShadow = `0 0 15px ${color}`;
-      heart.style.animationDuration = `${3 + Math.random() * 3}s`;
-      heart.style.animationDelay = `${Math.random() * 2}s`;
-
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 5000);
-    }
-
-    window.addEventListener('load', () => {
-      for (let i = 0; i < 20; i++) {
-        setTimeout(createHeart, i * 200);
-      }
-      setInterval(createHeart, 1000);
-    });
-
-    // Müzik player kontrolü
-    const music = document.getElementById('music');
-    const btn = document.getElementById('playPauseBtn');
-
-    btn.addEventListener('click', () => {
-      if(music.paused) {
-        music.play();
-        btn.textContent = '⏸️';
-      } else {
-        music.pause();
-        btn.textContent = '▶️';
-      }
-    });
-
-    window.addEventListener('load', () => {
-      music.play().then(() => {
-        btn.textContent = '⏸️';
-      }).catch(() => {
-        btn.textContent = '▶️';
-      });
-    });
-  </script>
-
-</body>
-</html>
+      const color = `h
