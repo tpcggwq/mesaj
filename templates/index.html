@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sevgilime Özel</title>
   <style>
     * {
@@ -21,8 +21,6 @@
       padding-bottom: 50px;
     }
     
-    /* Diğer stiller aynı... */
-    
     .heart {
       position: fixed;
       font-size: 28px;
@@ -33,7 +31,6 @@
       user-select: none;
       text-shadow: 0 0 15px #ff69b4;
       opacity: 0;
-      /* Rastgele başlangıç pozisyonu */
       left: calc(var(--start-x) * 100vw);
       top: calc(var(--start-y) * 100vh);
     }
@@ -53,7 +50,7 @@
       100% {
         transform: 
           translate(calc(var(--move-x) * 100px), 
-          calc(var(--move-y) * -100px)) 
+                    calc(var(--move-y) * -100px)) 
           rotate(720deg) 
           scale(0.5);
         opacity: 0;
@@ -63,28 +60,23 @@
 </head>
 <body>
 
-  <!-- Diğer HTML içeriği aynı... -->
+  <!-- Buraya sayfanın diğer içeriği gelecek -->
 
   <script>
-    // GELİŞMİŞ KALP ANİMASYONU
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
-      heart.innerHTML = '❤️';
+      heart.innerHTML = '❤';
       
-      // Rastgele özellikler
       const size = 20 + Math.random() * 30;
       const color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
       
-      // Rastgele hareket vektörü (-1 ile 1 arasında)
       const moveX = (Math.random() * 2 - 1).toFixed(2);
-      const moveY = (Math.random() * 1 + 0.5).toFixed(2); // Yukarı doğru
+      const moveY = (Math.random() * 1 + 0.5).toFixed(2);
       
-      // Rastgele başlangıç pozisyonu (tüm ekrana dağılmış)
       const startX = Math.random();
       const startY = Math.random();
       
-      // CSS değişkenlerini ayarla
       heart.style.setProperty('--start-x', startX);
       heart.style.setProperty('--start-y', startY);
       heart.style.setProperty('--move-x', moveX);
@@ -101,13 +93,10 @@
       setTimeout(() => heart.remove(), 5000);
     }
     
-    // SAYFA YÜKLENİRKEN 20 KALP
     window.addEventListener('load', () => {
       for (let i = 0; i < 20; i++) {
         setTimeout(createHeart, i * 200);
       }
-      
-      // HER SANİYE YENİ KALP
       setInterval(createHeart, 1000);
     });
   </script>
