@@ -2,136 +2,60 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mesajlaşma Uygulaması</title>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Mesajlaşma Uygulaması</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <h2>Firebase Mesajlaşma</h2>
+  <div class="container">
+    <header>
+      <h1>Mesajlaşma Uygulaması</h1>
+    </header>
 
-  <!-- Giriş/Kayıt -->
-  <input type="email" id="email" placeholder="E-posta">
-  <input type="password" id="password" placeholder="Şifre">
-  <button onclick="signIn()">Giriş Yap</button>
-  <button onclick="signUp()">Kayıt Ol</button>
-  <button onclick="signOut()">Çıkış Yap</button>
-  <p id="authStatus"></p>
+    <section id="auth-section" class="card">
+      <div class="tabs">
+        <button id="login-tab" class="tab active">Giriş Yap</button>
+        <button id="signup-tab" class="tab">Kayıt Ol</button>
+      </div>
 
-  <!-- Arkadaş Ekle -->
-  <input type="text" id="friendEmail" placeholder="Arkadaş e-postası">
-  <button onclick="addFriend()">Arkadaş Ekle</button>
+      <form id="login-form" class="form active">
+        <input type="email" id="login-email" placeholder="E-posta" required />
+        <input type="password" id="login-password" placeholder="Şifre" required />
+        <button type="submit" class="btn">Giriş Yap</button>
+      </form>
 
-  <!-- Mesajlaşma Alanı -->
-  <div id="chatBox" style="margin-top: 20px;"></div>
-  <input type="text" id="message" placeholder="Mesaj yaz...">
-  <button onclick="sendMessage()">Gönder</button>
+      <form id="signup-form" class="form">
+        <input type="text" id="signup-username" placeholder="Kullanıcı Adı" required />
+        <input type="email" id="signup-email" placeholder="E-posta" required />
+        <input type="password" id="signup-password" placeholder="Şifre" required />
+        <button type="submit" class="btn">Kayıt Ol</button>
+      </form>
+    </section>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDCnBMVNe3A9LPGbO_ZhExn5TKqWLz7WuU",
-      authDomain: "mesaj-f1916.firebaseapp.com",
-      projectId: "mesaj-f1916",
-      storageBucket: "mesaj-f1916.appspot.com", // doğru uzantı
-      messagingSenderId: "536452620539",
-      appId: "1:536452620539:web:82a98f87008cf0eef0505e",
-      measurementId: "G-5L4D051ES5"
-    };
+    <section id="app-section" class="hidden">
+      <aside class="sidebar card">
+        <h2>Arkadaşlar</h2>
+        <ul id="friends-list"></ul>
+        <input type="email" id="friend-email" placeholder="Arkadaş E-postası" />
+        <button id="add-friend-btn" class="btn">Arkadaş Ekle</button>
+      </aside>
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+      <main class="chat-panel card">
+        <h2 id="chat-with">Sohbet</h2>
+        <div id="messages"></div>
+        <form id="message-form">
+          <input type="text" id="message-input" placeholder="Mesaj yaz..." autocomplete="off" required />
+          <button type="submit" class="btn">Gönder</button>
+        </form>
+      </main>
+    </section>
 
-    let currentUser = null;
+  </div>
 
-    // Giriş
-    function signIn() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(user => {
-          document.getElementById("authStatus").innerText = "Giriş başarılı!";
-        })
-        .catch(error => {
-          document.getElementById("authStatus").innerText = "Hata: " + error.message;
-        });
-    }
-
-    // Kayıt
-    function signUp() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(user => {
-          document.getElementById("authStatus").innerText = "Kayıt başarılı!";
-        })
-        .catch(error => {
-          document.getElementById("authStatus").innerText = "Hata: " + error.message;
-        });
-    }
-
-    // Çıkış
-    function signOut() {
-      auth.signOut().then(() => {
-        document.getElementById("authStatus").innerText = "Çıkış yapıldı.";
-        currentUser = null;
-      });
-    }
-
-    // Arkadaş Ekleme
-    function addFriend() {
-      const friendEmail = document.getElementById("friendEmail").value;
-      if (!currentUser) return alert("Giriş yapmalısınız");
-
-      db.collection("friends").add({
-        owner: currentUser.email,
-        friend: friendEmail
-      }).then(() => {
-        alert("Arkadaş eklendi!");
-      }).catch(err => {
-        alert("Hata: " + err.message);
-      });
-    }
-
-    // Mesaj Gönderme
-    function sendMessage() {
-      const msg = document.getElementById("message").value;
-      if (!currentUser) return alert("Giriş yapmalısınız");
-
-      db.collection("messages").add({
-        sender: currentUser.email,
-        text: msg,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        document.getElementById("message").value = "";
-      });
-    }
-
-    // Gerçek Zamanlı Mesaj Takibi
-    db.collection("messages").orderBy("timestamp", "asc")
-      .onSnapshot(snapshot => {
-        const chatBox = document.getElementById("chatBox");
-        chatBox.innerHTML = "";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const msg = document.createElement("p");
-          msg.textContent = `${data.sender}: ${data.text}`;
-          chatBox.appendChild(msg);
-        });
-      });
-
-    // Kullanıcı Takibi
-    auth.onAuthStateChanged(user => {
-      currentUser = user;
-      if (user) {
-        document.getElementById("authStatus").innerText = `Hoş geldin, ${user.email}`;
-      } else {
-        document.getElementById("authStatus").innerText = "Giriş yapmadınız.";
-      }
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
