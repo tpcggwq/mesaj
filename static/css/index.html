@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Mesajlaşma Uygulaması</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Mesajlaşma Uygulaması</h1>
+    </header>
+
+    <section id="auth-section" class="card">
+      <div class="tabs">
+        <button id="login-tab" class="tab active">Giriş Yap</button>
+        <button id="signup-tab" class="tab">Kayıt Ol</button>
+      </div>
+
+      <form id="login-form" class="form active">
+        <input type="email" id="login-email" placeholder="E-posta" required />
+        <input type="password" id="login-password" placeholder="Şifre" required />
+        <button type="submit" class="btn">Giriş Yap</button>
+      </form>
+
+      <form id="signup-form" class="form">
+        <input type="text" id="signup-username" placeholder="Kullanıcı Adı" required />
+        <input type="email" id="signup-email" placeholder="E-posta" required />
+        <input type="password" id="signup-password" placeholder="Şifre" required />
+        <button type="submit" class="btn">Kayıt Ol</button>
+      </form>
+    </section>
+
+    <section id="app-section" class="hidden">
+      <aside class="sidebar card">
+        <h2>Arkadaşlar</h2>
+        <ul id="friends-list"></ul>
+        <input type="email" id="friend-email" placeholder="Arkadaş E-postası" />
+        <button id="add-friend-btn" class="btn">Arkadaş Ekle</button>
+      </aside>
+
+      <main class="chat-panel card">
+        <h2 id="chat-with">Sohbet</h2>
+        <div id="messages"></div>
+        <form id="message-form">
+          <input type="text" id="message-input" placeholder="Mesaj yaz..." autocomplete="off" required />
+          <button type="submit" class="btn">Gönder</button>
+        </form>
+      </main>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
