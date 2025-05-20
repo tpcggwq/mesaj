@@ -2,18 +2,59 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Mesajlaşma Defteri</title>
+  <title>Mesajlaşma Uygulaması</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #0d0d0d;
       color: #fff;
     }
 
-    /* Üst Menü */
+    /* === Giriş ekranı === */
+    #login-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #login-screen input, #login-screen button {
+      padding: 12px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 250px;
+    }
+
+    #login-screen input {
+      background: #111;
+      color: #0ff;
+      border-bottom: 2px solid #0ff;
+    }
+
+    #login-screen button {
+      background: #0ff;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #login-msg {
+      color: #f06;
+      margin-top: 10px;
+      text-shadow: 0 0 8px #f06;
+    }
+
+    /* === Üst Menü === */
     .topbar {
       background: #111;
       padding: 15px 20px;
@@ -24,27 +65,25 @@
     }
 
     .topbar h1 {
-      margin: 0;
-      font-size: 20px;
-      color: #00ffff;
+      font-size: 18px;
+      color: #0ff;
     }
 
     .topbar button {
       background: transparent;
-      border: 2px solid #00ffff;
-      color: #00ffff;
+      border: 2px solid #0ff;
+      color: #0ff;
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
-      transition: 0.3s;
     }
 
     .topbar button:hover {
-      background: #00ffff;
+      background: #0ff;
       color: #000;
     }
 
-    /* Arkadaş Paneli */
+    /* === Arkadaş Paneli === */
     .friend-panel {
       position: fixed;
       top: 0;
@@ -52,10 +91,10 @@
       width: 300px;
       height: 100vh;
       background: #1a1a1a;
-      box-shadow: -5px 0 15px rgba(0, 255, 255, 0.3);
       padding: 20px;
       transition: 0.4s ease-in-out;
       z-index: 999;
+      box-shadow: -5px 0 10px rgba(0, 255, 255, 0.4);
     }
 
     .friend-panel.active {
@@ -63,7 +102,7 @@
     }
 
     .friend-panel h2 {
-      color: #00ffff;
+      color: #0ff;
       margin-bottom: 15px;
     }
 
@@ -73,16 +112,16 @@
       margin-bottom: 10px;
       background: #111;
       border: none;
-      border-bottom: 2px solid #00ffff;
+      border-bottom: 2px solid #0ff;
       color: #0ff;
     }
 
     .friend-panel button {
       width: 100%;
       padding: 8px;
-      background: #00ffff;
-      border: none;
+      background: #0ff;
       color: #000;
+      border: none;
       font-weight: bold;
       cursor: pointer;
     }
@@ -101,7 +140,6 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      margin-left: 10px;
     }
 
     .online { background: limegreen; }
@@ -110,19 +148,55 @@
 </head>
 <body>
 
+  <!-- Giriş Ekranı -->
+  <div id="login-screen">
+    <input type="text" id="username" placeholder="Kullanıcı adı">
+    <input type="password" id="password" placeholder="Şifre">
+    <button onclick="register()">Kayıt Ol</button>
+    <button onclick="login()">Giriş Yap</button>
+    <div id="login-msg"></div>
+  </div>
+
+  <!-- Üst Menü -->
   <div class="topbar">
-    <h1>Mesajlaşma Defteri</h1>
+    <h1>Hoş geldin, <span id="userDisplay"></span></h1>
     <button onclick="toggleFriends()">Arkadaşlar</button>
   </div>
 
+  <!-- Arkadaş Paneli -->
   <div class="friend-panel" id="friendPanel">
-    <h2>Arkadaşların</h2>
+    <h2>Arkadaşlar</h2>
     <input type="text" id="friendName" placeholder="Arkadaş ismi gir">
     <button onclick="addFriend()">Ekle</button>
     <div id="friendList"></div>
   </div>
 
   <script>
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+
+    function register() {
+      const u = username.value.trim(), p = password.value;
+      if (!u || !p) return showMsg("Boş bırakma");
+      if (users[u]) return showMsg("Zaten kayıtlı");
+      users[u] = p;
+      localStorage.setItem("users", JSON.stringify(users));
+      login();
+    }
+
+    function login() {
+      const u = username.value.trim(), p = password.value;
+      if (users[u] === p) {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("userDisplay").innerText = u;
+      } else {
+        showMsg("Hatalı giriş");
+      }
+    }
+
+    function showMsg(msg) {
+      document.getElementById("login-msg").innerText = msg;
+    }
+
     function toggleFriends() {
       document.getElementById("friendPanel").classList.toggle("active");
     }
@@ -130,20 +204,17 @@
     function addFriend() {
       const name = document.getElementById("friendName").value.trim();
       if (!name) return;
+      const status = Math.random() > 0.5 ? "online" : "offline";
 
-      const friendList = document.getElementById("friendList");
-
-      const friendDiv = document.createElement("div");
-      friendDiv.className = "friend";
-      friendDiv.innerHTML = `
+      const div = document.createElement("div");
+      div.className = "friend";
+      div.innerHTML = `
         <span>${name}</span>
-        <span class="status-dot ${Math.random() > 0.5 ? 'online' : 'offline'}"></span>
+        <span class="status-dot ${status}"></span>
       `;
-      friendList.appendChild(friendDiv);
-
+      document.getElementById("friendList").appendChild(div);
       document.getElementById("friendName").value = "";
     }
   </script>
-
 </body>
 </html>
