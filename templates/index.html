@@ -195,7 +195,6 @@
 
     let isLogin = true;
 
-    // Sayfa yüklendiğinde "bu cihazı hatırla" var mı kontrolü
     window.onload = () => {
       const rememberedEmail = localStorage.getItem('rememberedEmail');
       const rememberedPass = localStorage.getItem('rememberedPass');
@@ -204,11 +203,16 @@
         passwordInput.value = rememberedPass;
         rememberCheckbox.checked = true;
       }
+      toggleForm(); // sayfa açılırken formu login modunda ayarla
     };
 
     // Form tipini değiştir (Giriş <-> Kayıt)
     switchBtn.onclick = () => {
       isLogin = !isLogin;
+      toggleForm();
+    };
+
+    function toggleForm() {
       if (isLogin) {
         formTitle.textContent = 'Giriş Yap';
         submitBtn.textContent = 'Giriş Yap';
@@ -224,15 +228,14 @@
         isimGroup.style.display = 'block';
         confirmPassGroup.style.display = 'block';
       }
-      // Form temizle
+      // Formu temizle
       isimInput.value = '';
       emailInput.value = '';
       passwordInput.value = '';
       confirmPassInput.value = '';
       rememberCheckbox.checked = false;
-    };
+    }
 
-    // Şifre değiştirme sayfasına yönlendir
     forgotPass.onclick = () => {
       window.location.href = 'sifre-degistirme.html';
     };
@@ -261,12 +264,57 @@
           return;
         }
 
-        // Giriş başarılı - sessionStorage güncelle
         sessionStorage.setItem('loggedInUser', email);
 
-        // Bu cihazı hatırla ise localStorage'a email ve şifre kaydet
         if (rememberCheckbox.checked) {
           localStorage.setItem('rememberedEmail', email);
           localStorage.setItem('rememberedPass', password);
         } else {
-          localStorage.removeItem('rememberedEmail
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPass');
+        }
+
+        alert(`Hoşgeldin, ${user.isim || 'Kullanıcı'}!`);
+        // İstersen buraya yönlendirme kodu ekle
+      } else {
+        // Kayıt işlemi
+        if (!isim || !email || !password || !confirmPassword) {
+          alert('Lütfen tüm alanları doldurun!');
+          return;
+        }
+        if (password !== confirmPassword) {
+          alert('Şifreler eşleşmiyor!');
+          return;
+        }
+        if (localStorage.getItem(email)) {
+          alert('Bu e-posta ile zaten kayıt olunmuş!');
+          return;
+        }
+        // Kullanıcıyı kaydet
+        const newUser = {
+          isim: isim,
+          password: password,
+        };
+        localStorage.setItem(email, JSON.stringify(newUser));
+        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+        isLogin = true;
+        toggleForm();
+      }
+    };
+
+    // (Arkadaşlar paneli buton ve form eventleri burada olabilir - örnek değil ise kaldırabilirsin)
+
+    // Örnek: Arkadaşlar butonu aç/kapa
+    const showFriendsBtn = document.getElementById('show-friends');
+    const friendsPanel = document.getElementById('friends-panel');
+    const closeFriendsBtn = document.getElementById('close-friends');
+
+    showFriendsBtn.onclick = () => {
+      friendsPanel.style.display = 'block';
+    };
+    closeFriendsBtn.onclick = () => {
+      friendsPanel.style.display = 'none';
+    };
+  </script>
+</body>
+</html>
