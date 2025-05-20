@@ -1,220 +1,345 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mesajlaşma Uygulaması</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giriş Yap / Kayıt Ol</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0d0d0d;
-      color: #fff;
-    }
-
-    /* === Giriş ekranı === */
-    #login-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #0d0d0d;
+      background: #050a15;
+      color: #0ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
-    }
-
-    #login-screen input, #login-screen button {
-      padding: 12px;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      width: 250px;
-    }
-
-    #login-screen input {
-      background: #111;
-      color: #0ff;
-      border-bottom: 2px solid #0ff;
-    }
-
-    #login-screen button {
-      background: #0ff;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #login-msg {
-      color: #f06;
-      margin-top: 10px;
-      text-shadow: 0 0 8px #f06;
-    }
-
-    /* === Üst Menü === */
-    .topbar {
-      background: #111;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 0 10px #00ffff;
-    }
-
-    .topbar h1 {
-      font-size: 18px;
-      color: #0ff;
-    }
-
-    .topbar button {
-      background: transparent;
-      border: 2px solid #0ff;
-      color: #0ff;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .topbar button:hover {
-      background: #0ff;
-      color: #000;
-    }
-
-    /* === Arkadaş Paneli === */
-    .friend-panel {
-      position: fixed;
-      top: 0;
-      right: -300px;
-      width: 300px;
       height: 100vh;
-      background: #1a1a1a;
-      padding: 20px;
-      transition: 0.4s ease-in-out;
-      z-index: 999;
-      box-shadow: -5px 0 10px rgba(0, 255, 255, 0.4);
+      margin: 0;
     }
-
-    .friend-panel.active {
-      right: 0;
+    .container {
+      background: #111f3d;
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 0 30px #0ff5;
     }
-
-    .friend-panel h2 {
-      color: #0ff;
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
       margin-bottom: 15px;
-    }
-
-    .friend-panel input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      background: #111;
+      border-radius: 6px;
       border: none;
-      border-bottom: 2px solid #0ff;
-      color: #0ff;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
-
-    .friend-panel button {
+    label {
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    button {
       width: 100%;
-      padding: 8px;
       background: #0ff;
       color: #000;
       border: none;
+      padding: 12px;
+      border-radius: 6px;
       font-weight: bold;
+      font-size: 1.1rem;
       cursor: pointer;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease;
     }
-
-    .friend {
+    button:hover {
+      background: #0cc;
+    }
+    .switch-btn {
+      background: none;
+      border: none;
+      color: #0ff;
+      text-decoration: underline;
+      cursor: pointer;
+      margin: 10px 0;
+      display: block;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .remember {
+      margin-bottom: 15px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    .forgot-link {
+      color: #0ff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 8px;
+      user-select: none;
+      text-decoration: underline;
+    }
+    /* Arkadaşlar paneli stili */
+    #friends-panel {
+      display: none;
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      width: 300px;
+      height: 400px;
       background: #222;
+      color: white;
+      border-radius: 10px;
+      padding: 15px;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    #friends-panel h3 {
+      margin-top: 0;
+    }
+    #friends-list div {
       padding: 8px;
-      margin-top: 10px;
+      border-bottom: 1px solid #444;
+    }
+    #friends-list div.online {
+      color: #0f0;
+    }
+    #friends-list div.offline {
+      color: #888;
+    }
+    #show-friends {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      padding: 10px 15px;
+      background: #ff1493;
+      color: white;
+      border: none;
       border-radius: 5px;
+      cursor: pointer;
+      z-index: 1001;
     }
-
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .online { background: limegreen; }
-    .offline { background: gray; }
   </style>
 </head>
 <body>
 
-  <!-- Giriş Ekranı -->
-  <div id="login-screen">
-    <input type="text" id="username" placeholder="Kullanıcı adı">
-    <input type="password" id="password" placeholder="Şifre">
-    <button onclick="register()">Kayıt Ol</button>
-    <button onclick="login()">Giriş Yap</button>
-    <div id="login-msg"></div>
+  <div class="container" id="form-container">
+    <h2 id="form-title">Giriş Yap</h2>
+    <input type="email" id="email" placeholder="E-posta" autocomplete="username" />
+    <input type="password" id="password" placeholder="Şifre" autocomplete="current-password" />
+    <div class="remember">
+      <input type="checkbox" id="remember" />
+      <label for="remember">Bu cihazı hatırla</label>
+    </div>
+    <button id="submit-btn">Giriş Yap</button>
+    <button class="switch-btn" id="switch-btn">Kayıt Ol</button>
+    <div class="forgot-link" id="forgot-pass">Şifreni mi unuttun? Değiştir</div>
   </div>
 
-  <!-- Üst Menü -->
-  <div class="topbar">
-    <h1>Hoş geldin, <span id="userDisplay"></span></h1>
-    <button onclick="toggleFriends()">Arkadaşlar</button>
+  <!-- Arkadaşlar paneli -->
+  <div id="friends-panel">
+    <button id="close-friends" style="float:right; background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button>
+    <h3>Arkadaşlar</h3>
+    <div id="friends-list">
+      <!-- Arkadaşlar listesi buraya -->
+    </div>
+    <hr style="margin:10px 0; border-color: #555;">
+    <form id="add-friend-form">
+      <input type="text" id="friend-username" placeholder="Arkadaş kullanıcı adı" required style="width: 70%; padding: 5px;" />
+      <button type="submit" style="padding: 5px 10px;">Ekle</button>
+    </form>
+    <p id="friend-error" style="color: #f44336; margin-top: 10px; display:none;"></p>
   </div>
 
-  <!-- Arkadaş Paneli -->
-  <div class="friend-panel" id="friendPanel">
-    <h2>Arkadaşlar</h2>
-    <input type="text" id="friendName" placeholder="Arkadaş ismi gir">
-    <button onclick="addFriend()">Ekle</button>
-    <div id="friendList"></div>
-  </div>
+  <!-- Arkadaşlar butonu -->
+  <button id="show-friends">Arkadaşlar</button>
 
   <script>
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    const formContainer = document.getElementById('form-container');
+    const formTitle = document.getElementById('form-title');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('remember');
+    const submitBtn = document.getElementById('submit-btn');
+    const switchBtn = document.getElementById('switch-btn');
+    const forgotPass = document.getElementById('forgot-pass');
 
-    function register() {
-      const u = username.value.trim(), p = password.value;
-      if (!u || !p) return showMsg("Boş bırakma");
-      if (users[u]) return showMsg("Zaten kayıtlı");
-      users[u] = p;
-      localStorage.setItem("users", JSON.stringify(users));
-      login();
-    }
+    let isLogin = true;
 
-    function login() {
-      const u = username.value.trim(), p = password.value;
-      if (users[u] === p) {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("userDisplay").innerText = u;
-      } else {
-        showMsg("Hatalı giriş");
+    // Sayfa yüklendiğinde "bu cihazı hatırla" var mı kontrolü
+    window.onload = () => {
+      const rememberedEmail = localStorage.getItem('rememberedEmail');
+      const rememberedPass = localStorage.getItem('rememberedPass');
+      if (rememberedEmail && rememberedPass) {
+        emailInput.value = rememberedEmail;
+        passwordInput.value = rememberedPass;
+        rememberCheckbox.checked = true;
       }
+    };
+
+    // Form tipini değiştir
+    switchBtn.onclick = () => {
+      isLogin = !isLogin;
+      if (isLogin) {
+        formTitle.textContent = 'Giriş Yap';
+        submitBtn.textContent = 'Giriş Yap';
+        switchBtn.textContent = 'Kayıt Ol';
+        forgotPass.style.display = 'block';
+      } else {
+        formTitle.textContent = 'Kayıt Ol';
+        submitBtn.textContent = 'Kayıt Ol';
+        switchBtn.textContent = 'Giriş Yap';
+        forgotPass.style.display = 'none';
+      }
+      emailInput.value = '';
+      passwordInput.value = '';
+      rememberCheckbox.checked = false;
+    };
+
+    // Şifre değiştirme sayfasına yönlendir
+    forgotPass.onclick = () => {
+      window.location.href = 'sifre-degistirme.html';
+    };
+
+    submitBtn.onclick = () => {
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        alert('Lütfen tüm alanları doldurun!');
+        return;
+      }
+
+      if (isLogin) {
+        // Giriş işlemi
+        const userStr = localStorage.getItem(email);
+        if (!userStr) {
+          alert('Böyle bir kullanıcı bulunamadı!');
+          return;
+        }
+        const user = JSON.parse(userStr);
+        if (user.password !== password) {
+          alert('Şifre yanlış!');
+          return;
+        }
+
+        // Giriş başarılı - sessionStorage güncelle
+        sessionStorage.setItem('loggedInUser', email);
+
+        // Bu cihazı hatırla ise localStorage'a email ve şifre kaydet
+        if (rememberCheckbox.checked) {
+          localStorage.setItem('rememberedEmail', email);
+          localStorage.setItem('rememberedPass', password);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPass');
+        }
+
+        alert('Giriş başarılı!');
+        window.location.href = 'index.html';
+
+      } else {
+        // Kayıt işlemi
+        if (localStorage.getItem(email)) {
+          alert('Bu e-posta zaten kayıtlı!');
+          return;
+        }
+
+        if (password.length < 6) {
+          alert('Şifre en az 6 karakter olmalı!');
+          return;
+        }
+
+        // Yeni kullanıcı kaydet
+        const newUser = { password: password, friends: [] };
+        localStorage.setItem(email, JSON.stringify(newUser));
+
+        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+
+        // Formu girişe döndür
+        switchBtn.click();
+      }
+    };
+
+    // Arkadaşlar paneli kontrolü
+    const showFriendsBtn = document.getElementById('show-friends');
+    const friendsPanel = document.getElementById('friends-panel');
+    const closeFriendsBtn = document.getElementById('close-friends');
+    const addFriendForm = document.getElementById('add-friend-form');
+    const friendUsernameInput = document.getElementById('friend-username');
+    const friendError = document.getElementById('friend-error');
+    const friendsListDiv = document.getElementById('friends-list');
+
+    // Simüle edilmiş kayıtlı kullanıcılar listesi (örnek)
+    const registeredUsers = ['toprak', 'dora', 'ali', 'ayse'];
+
+    // Mevcut arkadaşlar listesi (localStorage'dan alınabilir)
+    let friends = JSON.parse(localStorage.getItem('friends') || '[]');
+
+    // Arkadaşlar panelini açma
+    showFriendsBtn.addEventListener('click', () => {
+      friendsPanel.style.display = 'block';
+      friendError.style.display = 'none';
+      renderFriends();
+    });
+
+    // Arkadaşlar panelini kapatma
+    closeFriendsBtn.addEventListener('click', () => {
+      friendsPanel.style.display = 'none';
+      friendError.style.display = 'none';
+    });
+
+    // Arkadaş ekleme işlemi
+    addFriendForm.addEventListener('submit', e => {
+      e.preventDefault();
+      friendError.style.display = 'none';
+      const newFriend = friendUsernameInput.value.trim().toLowerCase();
+
+      if (!registeredUsers.includes(newFriend)) {
+        friendError.textContent = 'Kullanıcı bulunamadı.';
+        friendError.style.display = 'block';
+        return;
+      }
+
+      if (friends.includes(newFriend)) {
+        friendError.textContent = 'Bu kullanıcı zaten arkadaş listende.';
+        friendError.style.display = 'block';
+        return;
+      }
+
+      friends.push(newFriend);
+      localStorage.setItem('friends', JSON.stringify(friends));
+      friendUsernameInput.value = '';
+      renderFriends();
+    });
+
+    // Arkadaşlar listesini ekrana yazdırma fonksiyonu
+    function renderFriends() {
+      if (friends.length === 0) {
+        friendsListDiv.innerHTML = '<p>Henüz arkadaşınız yok.</p>';
+        return;
+      }
+      friendsListDiv.innerHTML = '';
+      friends.forEach(friend => {
+        const div = document.createElement('div');
+        // Rastgele çevrimiçi durumu simülasyonu
+        const online = Math.random() > 0.5;
+        div.textContent = friend + (online ? ' (Çevrimiçi)' : ' (Çevrimdışı)');
+        div.className = online ? 'online' : 'offline';
+        friendsListDiv.appendChild(div);
+      });
     }
 
-    function showMsg(msg) {
-      document.getElementById("login-msg").innerText = msg;
-    }
+    // İlk açılışta varsa arkadaşları göster
+    renderFriends();
 
-    function toggleFriends() {
-      document.getElementById("friendPanel").classList.toggle("active");
-    }
-
-    function addFriend() {
-      const name = document.getElementById("friendName").value.trim();
-      if (!name) return;
-      const status = Math.random() > 0.5 ? "online" : "offline";
-
-      const div = document.createElement("div");
-      div.className = "friend";
-      div.innerHTML = `
-        <span>${name}</span>
-        <span class="status-dot ${status}"></span>
-      `;
-      document.getElementById("friendList").appendChild(div);
-      document.getElementById("friendName").value = "";
-    }
   </script>
+
 </body>
 </html>
