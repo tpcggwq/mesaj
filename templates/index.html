@@ -50,14 +50,7 @@
         border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        cursor: pointer;
         position: relative;
-    }
-
-    .photo-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
     }
 
     .photo-card img {
@@ -65,12 +58,7 @@
         height: 300px;
         object-fit: cover;
         display: block;
-        transition: filter 0.3s ease;
         border-bottom: 1px solid #ddd;
-    }
-
-    .photo-card:hover img {
-        filter: brightness(1.2);
     }
 
     .caption {
@@ -79,9 +67,9 @@
         font-family: "Lucida Console", "Courier New", monospace;
         font-weight: 600;
         font-size: 18px;
-        color: #ffffff;
-        background: #f9f9f9;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        color: #121212; /* Siyah renk olarak düzeltildi */
+        background: linear-gradient(to right, #f37055, #ff9a8b);
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.3); /* Beyaz gölge eklendi */
         letter-spacing: 1px;
     }
 
@@ -91,7 +79,7 @@
         }
     }
 
-    /* KALP ANİMASYONU */
+    /* KALP STİLLERİ */
     .heart {
         position: fixed;
         pointer-events: none;
@@ -99,7 +87,7 @@
         opacity: 0.7;
         z-index: 999;
         user-select: none;
-        font-size: 20px;
+        font-size: 24px;
     }
 
     @keyframes float {
@@ -152,6 +140,9 @@
       const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
       const heartCount = 15;
       
+      // Önceki kalpleri temizle
+      document.querySelectorAll('.heart').forEach(heart => heart.remove());
+      
       for (let i = 0; i < heartCount; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -167,6 +158,9 @@
 
     // SAYFA YÜKLENİNCE ÇALIŞTIR
     window.addEventListener('load', createHearts);
+    
+    // EKRAN BOYUTU DEĞİŞİNCE YENİDEN OLUŞTUR
+    window.addEventListener('resize', createHearts);
   </script>
 </body>
 </html>
