@@ -286,3 +286,46 @@
 
 </body>
 </html>
+<script>
+  window.onload = () => {
+    // Her zaman giriş ekranı göster
+    document.getElementById("auth-screen").style.display = "flex";
+    document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "none");
+  };
+
+  function showMainContent(username) {
+    document.getElementById("auth-screen").style.display = "none";
+    document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "");
+  }
+
+  function register() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    if (!username || !password) return showMessage("Boş bırakma kardeşim 😅");
+
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (users[username]) {
+      showMessage("Zaten kayıtlı bir kullanıcı.");
+    } else {
+      users[username] = password;
+      localStorage.setItem("users", JSON.stringify(users));
+      showMainContent(username);
+    }
+  }
+
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+
+    if (users[username] === password) {
+      showMainContent(username);
+    } else {
+      showMessage("Kullanıcı adı ya da şifre yanlış.");
+    }
+  }
+
+  function showMessage(msg) {
+    document.getElementById("auth-msg").innerText = msg;
+  }
+</script>
