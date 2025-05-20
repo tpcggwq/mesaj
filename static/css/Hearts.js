@@ -30,3 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(heartInterval);
   });
 });
+const mesajlar = {
+  "Ayşe": "Ayşe, seninle geçen her gün ayrı bir mutluluk!",
+  "Mehmet": "Mehmet, dostluğun altın değerinde.",
+  "Zeynep": "Zeynep, sen çok özel bir insansın!",
+};
+
+function mesajiGoster() {
+  const isim = document.getElementById("isimInput").value.trim();
+  const mesaj = mesajlar[isim];
+
+  if (mesaj) {
+    document.getElementById("giris-ekrani").style.display = "none";
+    document.getElementById("ana-icerik").style.display = "block";
+    document.getElementById("kisiBaslik").innerText = `Merhaba ${isim}!`;
+    document.getElementById("kisiMesaji").innerText = mesaj;
+  } else {
+    alert("Üzgünüm, bu isim için bir mesaj bulunamadı.");
+  }
+}
