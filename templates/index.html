@@ -4,94 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ana</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      color: white;
-      font-family: "Lucida Console", "Courier New", monospace;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 30px;
-      color: #f37055;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    p {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      font-size: 18px;
-      line-height: 1.7;
-      text-align: justify;
-      color: #f0f0f0;
-    }
-
+    /* EKSİKLERİ TAMAMLAYAN CSS */
     .gallery {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
       padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
     }
-
-    .photo-card {
-      background: transparent;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-      aspect-ratio: 1/1;
-    }
-
     .photo-card:hover {
-      transform: scale(1.03);
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* Kalp animasyonu */
-    .heart {
-      position: fixed;
-      pointer-events: none;
-      animation: float 4s linear infinite;
-      z-index: 999;
-      font-size: 20px;
-      color: #ff6b6b;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(100vh) translateX(10vw) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.8; }
-      90% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) translateX(30vw) rotate(360deg); opacity: 0; }
-    }
-
-    @media (max-width: 768px) {
-      .gallery {
-        grid-template-columns: 1fr;
-      }
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
   </style>
 </head>
 <body>
 
+  <!-- Aynı başlık ve paragraf içeriği -->
   <h1>SELAM AŞKIM</h1>
+  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin...</p>
 
-  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya "yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur." Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
-
+  <!-- GALERİ KISMI (2'Lİ SIRA) -->
   <div class="gallery">
     <div class="photo-card">
       <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg">
@@ -116,48 +50,50 @@
     </div>
   </div>
 
+  <!-- KALPLER İÇİN JS -->
   <script>
-    // Kalp oluşturma fonksiyonu
-    function createHearts() {
-      const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#ffd8d8'];
-      const heartCount = 20;
-      
-      for (let i = 0; i < heartCount; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerHTML = '❤';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-        heart.style.fontSize = (10 + Math.random() * 20) + 'px';
-        heart.style.animationDuration = (3 + Math.random() * 5) + 's';
-        heart.style.animationDelay = Math.random() * 3 + 's';
-        document.body.appendChild(heart);
+    // CSS STİL EKLEME
+    const style = document.createElement('style');
+    style.textContent = `
+      .heart {
+        position: fixed;
+        pointer-events: none;
+        animation: float 4s linear infinite;
+        z-index: 999;
+        font-size: 20px;
+        color: #ff6b6b;
       }
+      @keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // KALP OLUŞTURMA
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (15 + Math.random() * 25) + 'px';
+      heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+      document.body.appendChild(heart);
+      
+      // Animasyon bitince kalbi sil
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
     }
 
-    // Sayfa yüklendiğinde kalpleri oluştur
-    window.addEventListener('load', createHearts);
-
-    // Her 5 saniyede yeni kalpler ekle
-    setInterval(createHearts, 5000);
-
-    // Fotoğraf büyütme/küçültme
-    document.querySelectorAll('.photo-card').forEach(card => {
-      card.addEventListener('click', function() {
-        this.classList.toggle('zoomed');
-        document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : '';
-      });
-    });
-
-    // ESC tuşuyla zoom'u kapat
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.photo-card.zoomed').forEach(el => {
-          el.classList.remove('zoomed');
-        });
-        document.body.style.overflow = '';
-      }
-    });
+    // HER 0.5 SANİYEDE YENİ KALP
+    setInterval(createHeart, 500);
+    
+    // BAŞLANGIÇTA 20 KALP
+    for(let i=0; i<20; i++) {
+      setTimeout(createHeart, i * 100);
+    }
   </script>
 </body>
 </html>
