@@ -1,431 +1,405 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mesajlaşma Sistemi - Firebase Entegrasyonlu</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Firebase Sohbet Uygulaması</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0; padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #loginContainer, #chatContainer {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      width: 360px;
+      max-width: 95vw;
+      display: none;
+      flex-direction: column;
+    }
+    #loginContainer.active, #chatContainer.active {
+      display: flex;
+    }
+    input, button {
+      margin: 6px 0;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: none;
+      outline: none;
+    }
+    input {
+      width: 100%;
+    }
+    button {
+      background: #0af;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #06c;
+    }
+    #friendsList div {
+      padding: 8px;
+      margin: 4px 0;
+      background: #333;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #friendsList div:hover {
+      background: #0af;
+    }
+    #chatArea {
+      background: #111;
+      height: 300px;
+      overflow-y: auto;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .message {
+      margin-bottom: 12px;
+      padding: 8px;
+      border-radius: 6px;
+      background: #444;
+    }
+    .message b {
+      color: #0af;
+    }
+    #userName {
+      font-weight: bold;
+      margin-bottom: 12px;
+      text-align: center;
+      color: #0af;
+      font-size: 18px;
+    }
+  </style>
 
-<style>
-  body {
-    margin: 0; padding: 0; font-family: Arial, sans-serif; background: #050a15; color: #0ff;
-  }
-  #login-container, #chat-container {
-    max-width: 400px;
-    margin: 40px auto;
-    background: #111f3d;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  input, button, textarea {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-  button {
-    background: #0ff;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #0cc;
-  }
-  #chat-area {
-    border: 1px solid #0ff;
-    height: 300px;
-    overflow-y: auto;
-    padding: 10px;
-    background: #001122;
-    margin-bottom: 10px;
-  }
-  .message {
-    margin-bottom: 15px;
-    border-bottom: 1px dotted #0ff;
-    padding-bottom: 10px;
-  }
-  .message img {
-    max-width: 100%;
-    border-radius: 8px;
-    display: block;
-    margin-top: 5px;
-  }
-  #friends-list {
-    margin-top: 20px;
-  }
-  #friends-list div {
-    padding: 8px;
-    border-bottom: 1px solid #0ff4;
-    cursor: pointer;
-  }
-  #friends-list div:hover {
-    background: #0ff2;
-    color: #000;
-  }
-  #remember-me-container {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-  }
-  #remember-me-container input[type="checkbox"] {
-    margin-right: 8px;
-  }
-</style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<!-- Firebase SDK'ları -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCnBMVNe3A9LPGbO_ZhExn5TKqWLz7WuU",
+      authDomain: "mesaj-f1916.firebaseapp.com",
+      projectId: "mesaj-f1916",
+      storageBucket: "mesaj-f1916.appspot.com",
+      messagingSenderId: "536452620539",
+      appId: "1:536452620539:web:82a98f87008cf0eef0505e",
+      measurementId: "G-5L4D051ES5"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
 </head>
 <body>
 
-<div id="login-container">
-  <h2>Giriş Yap / Kayıt Ol</h2>
-  <input type="text" id="username" placeholder="Kullanıcı Adı" autocomplete="username" />
-  <input type="email" id="email" placeholder="E-posta (sadece kayıt için)" autocomplete="email" />
-  <input type="password" id="password" placeholder="Şifre" autocomplete="current-password" />
-  <div id="remember-me-container">
-    <input type="checkbox" id="remember-me" />
-    <label for="remember-me">Beni hatırla</label>
+  <!-- Giriş ve Kayıt Alanı -->
+  <div id="loginContainer" class="active">
+    <h2>Giriş / Kayıt</h2>
+    <input id="usernameInput" type="text" placeholder="Kullanıcı Adı (Kayıt için)" />
+    <input id="emailInput" type="email" placeholder="E-posta" />
+    <input id="passwordInput" type="password" placeholder="Şifre" />
+    <button id="registerBtn">Kayıt Ol</button>
+    <button id="loginBtn">Giriş Yap</button>
   </div>
-  <button id="login-btn">Giriş Yap</button>
-  <button id="register-btn">Kayıt Ol</button>
-</div>
 
-<div id="chat-container" style="display:none;">
-  <h2>Mesajlaşma</h2>
-  <div>
-    <b>Hoşgeldin, <span id="user-name"></span>!</b>
-    <button id="logout-btn" style="float:right; width:auto; padding:5px 10px; background:#f00; color:#fff; border:none; border-radius:5px;">Çıkış</button>
+  <!-- Sohbet Alanı -->
+  <div id="chatContainer">
+    <div id="userName">Kullanıcı</div>
+    <button id="logoutBtn" style="margin-bottom:10px;">Çıkış Yap</button>
+
+    <div>
+      <input id="friendUsernameInput" placeholder="Arkadaş Kullanıcı Adı" />
+      <button id="addFriendBtn">Arkadaş Ekle</button>
+    </div>
+
+    <h3>Arkadaşlar</h3>
+    <div id="friendsList" style="max-height:120px; overflow-y:auto;"></div>
+
+    <h3>Mesajlar</h3>
+    <div id="chatArea"></div>
+
+    <input id="noteInput" type="text" placeholder="Mesaj yaz..." />
+    <button id="sendMsgBtn">Gönder</button>
   </div>
-  
-  <input type="text" id="friend-username" placeholder="Arkadaşının kullanıcı adını yaz ve ekle" />
-  <button id="add-friend-btn">Arkadaş Ekle</button>
-  <div id="friends-list"></div>
-  
-  <div id="chat-area"></div>
-  
-  <input type="text" id="note-input" placeholder="Fotoğraf altına not yaz..." />
-  <input type="file" id="photo-input" accept="image/*" />
-  <button id="send-msg-btn">Gönder</button>
-</div>
 
 <script>
-  // Firebase yapılandırma ve başlatma
-  const firebaseConfig = {
-    apiKey: "AIzaSyDCnBMVNe3A9LPGbO_ZhExn5TKqWLz7WuU",
-    authDomain: "mesaj-f1916.firebaseapp.com",
-    projectId: "mesaj-f1916",
-    storageBucket: "mesaj-f1916.firebasestorage.app",
-    messagingSenderId: "536452620539",
-    appId: "1:536452620539:web:82a98f87008cf0eef0505e",
-    measurementId: "G-5L4D051ES5"
+  // DOM elementleri
+  const loginContainer = document.getElementById('loginContainer');
+  const chatContainer = document.getElementById('chatContainer');
+
+  const usernameInput = document.getElementById('usernameInput');
+  const emailInput = document.getElementById('emailInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const registerBtn = document.getElementById('registerBtn');
+  const loginBtn = document.getElementById('loginBtn');
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  const friendUsernameInput = document.getElementById('friendUsernameInput');
+  const addFriendBtn = document.getElementById('addFriendBtn');
+  const friendsListDiv = document.getElementById('friendsList');
+  const chatArea = document.getElementById('chatArea');
+  const noteInput = document.getElementById('noteInput');
+  const sendMsgBtn = document.getElementById('sendMsgBtn');
+  const userNameSpan = document.getElementById('userName');
+
+  let currentUserId = null;
+  let currentUserData = null;
+  let currentChatFriendUid = null;
+
+  function showLogin(){
+    loginContainer.classList.add('active');
+    chatContainer.classList.remove('active');
+    usernameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+    friendUsernameInput.value = '';
+    friendsListDiv.innerHTML = '';
+    chatArea.innerHTML = '';
+    userNameSpan.textContent = 'Kullanıcı';
+    currentUserId = null;
+    currentUserData = null;
+    currentChatFriendUid = null;
+  }
+
+  function showChat(userData, uid){
+    loginContainer.classList.remove('active');
+    chatContainer.classList.add('active');
+    userNameSpan.textContent = userData.username || 'Kullanıcı';
+    currentUserId = uid;
+    currentUserData = userData;
+    renderFriends(userData);
+    renderMessages(null);
+  }
+
+  // Kayıt olma
+  registerBtn.onclick = () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const username = usernameInput.value.trim();
+
+    if (!email || !password || !username) {
+      alert('Lütfen tüm alanları doldurun!');
+      return;
+    }
+    if(password.length < 6) {
+      alert('Şifre en az 6 karakter olmalı!');
+      return;
+    }
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        return db.collection('users').doc(user.uid).set({
+          username: username,
+          email: email,
+          friends: []
+        });
+      })
+      .then(() => {
+        alert('Kayıt başarılı! Giriş yapılıyor...');
+        loginUser(email, password);
+      })
+      .catch(error => alert(error.message));
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  // Giriş yapma fonksiyonu
+  function loginUser(email, password){
+    auth.signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        loadUserData(user.uid);
+      })
+      .catch(error => alert(error.message));
+  }
 
-  // Buradan sonrası senin mevcut uygulama kodun (localStorage tabanlı)
-  (() => {
-    const loginContainer = document.getElementById('login-container');
-    const chatContainer = document.getElementById('chat-container');
-    const usernameInput = document.getElementById('username');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const rememberMeCheckbox = document.getElementById('remember-me');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const userNameSpan = document.getElementById('user-name');
-
-    const friendUsernameInput = document.getElementById('friend-username');
-    const addFriendBtn = document.getElementById('add-friend-btn');
-    const friendsListDiv = document.getElementById('friends-list');
-
-    const chatArea = document.getElementById('chat-area');
-    const noteInput = document.getElementById('note-input');
-    const photoInput = document.getElementById('photo-input');
-    const sendMsgBtn = document.getElementById('send-msg-btn');
-
-    // Kullanıcı verileri storage keyleri
-    const STORAGE_USERS_KEY = 'users';
-    const STORAGE_LOGGEDIN_KEY = 'loggedInUser'; // obj: {username,email,rememberMe}
-    const STORAGE_MESSAGES_KEY = 'messages'; // {from,to, note, photoDataUrl, timestamp}
-
-    function getUsers() {
-      return JSON.parse(localStorage.getItem(STORAGE_USERS_KEY) || '{}');
+  loginBtn.onclick = () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    if(!email || !password) {
+      alert('Lütfen e-posta ve şifre girin!');
+      return;
     }
-    function saveUsers(users) {
-      localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
-    }
+    loginUser(email, password);
+  };
 
-    function getMessages() {
-      return JSON.parse(localStorage.getItem(STORAGE_MESSAGES_KEY) || '[]');
-    }
-    function saveMessages(messages) {
-      localStorage.setItem(STORAGE_MESSAGES_KEY, JSON.stringify(messages));
-    }
-
-    function getLoggedInUser() {
-      return JSON.parse(localStorage.getItem(STORAGE_LOGGEDIN_KEY) || 'null');
-    }
-    function setLoggedInUser(userObj) {
-      if(userObj) {
-        if(userObj.rememberMe) {
-          localStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(userObj));
-        } else {
-          sessionStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(userObj));
-          localStorage.removeItem(STORAGE_LOGGEDIN_KEY);
+  // Kullanıcı verilerini yükle
+  function loadUserData(uid){
+    db.collection('users').doc(uid).get()
+      .then(doc => {
+        if(!doc.exists){
+          alert('Kullanıcı verisi bulunamadı!');
+          auth.signOut();
+          showLogin();
+          return;
         }
-      } else {
-        localStorage.removeItem(STORAGE_LOGGEDIN_KEY);
-        sessionStorage.removeItem(STORAGE_LOGGEDIN_KEY);
-      }
-    }
+        const userData = doc.data();
+        showChat(userData, uid);
+      });
+  }
 
-    function autoLogin() {
-      let user = getLoggedInUser();
-      if(!user) {
-        user = JSON.parse(sessionStorage.getItem(STORAGE_LOGGEDIN_KEY) || 'null');
-        if(user) {
-          localStorage.setItem(STORAGE_LOGGEDIN_KEY, JSON.stringify(user));
+  // Arkadaşları göster
+  function renderFriends(userData){
+    const friends = userData.friends || [];
+    friendsListDiv.innerHTML = '';
+    if(friends.length === 0){
+      friendsListDiv.innerHTML = '<i>Arkadaşınız yok.</i>';
+      return;
+    }
+    friends.forEach(friendUid => {
+      db.collection('users').doc(friendUid).get().then(doc => {
+        if(doc.exists){
+          const friendData = doc.data();
+          const div = document.createElement('div');
+          div.textContent = friendData.username || 'Bilinmeyen';
+          div.onclick = () => {
+            renderMessages(friendUid);
+          };
+          friendsListDiv.appendChild(div);
         }
-      }
-      if(user) {
-        showChat(user);
-      } else {
-        showLogin();
-      }
+      });
+    });
+  }
+
+  // Arkadaş ekleme
+  addFriendBtn.onclick = () => {
+    const friendUsername = friendUsernameInput.value.trim();
+    if(!friendUsername){
+      alert('Lütfen arkadaş kullanıcı adını yazın!');
+      return;
     }
 
-    function showLogin() {
-      loginContainer.style.display = 'block';
-      chatContainer.style.display = 'none';
-      usernameInput.value = '';
-      emailInput.value = '';
-      passwordInput.value = '';
-      rememberMeCheckbox.checked = false;
+    db.collection('users').where('username', '==', friendUsername).get()
+      .then(snapshot => {
+        if(snapshot.empty){
+          alert('Böyle bir kullanıcı yok.');
+          return;
+        }
+        const friendDoc = snapshot.docs[0];
+        const friendUid = friendDoc.id;
+
+        if(friendUid === currentUserId){
+          alert('Kendinizi arkadaş olarak ekleyemezsiniz.');
+          return;
+        }
+
+        const userRef = db.collection('users').doc(currentUserId);
+        const friendRef = db.collection('users').doc(friendUid);
+
+        Promise.all([
+          userRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion(friendUid)
+          }),
+          friendRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion(currentUserId)
+          })
+        ]).then(() => {
+          alert(friendUsername + ' arkadaş olarak eklendi.');
+          loadUserData(currentUserId);
+          friendUsernameInput.value = '';
+        }).catch(e => alert('Arkadaş eklenirken hata: ' + e.message));
+      }).catch(e => alert('Arkadaş ararken hata: ' + e.message));
+  };
+
+  // Mesajları gösterme ve gerçek zamanlı dinleme
+  function renderMessages(friendUid){
+    currentChatFriendUid = friendUid;
+    chatArea.innerHTML = '';
+    if(!friendUid){
+      chatArea.innerHTML = '<i>Bir arkadaş seçin veya mesajlaşmak için arkadaş ekleyin.</i>';
+      return;
     }
 
-    function showChat(user) {
-      loginContainer.style.display = 'none';
-      chatContainer.style.display = 'block';
-      userNameSpan.textContent = user.username;
-      renderFriends(user);
-      renderMessages(user.username, null);
+    // Dinleme (unsubscribe için değişkene alabiliriz ama basit tuttum)
+    db.collection('messages')
+      .where('participants', 'array-contains', currentUserId)
+      .orderBy('timestamp')
+      .onSnapshot(snapshot => {
+        chatArea.innerHTML = '';
+        snapshot.docs.forEach(doc => {
+          const msg = doc.data();
+          if(msg.participants.includes(friendUid)){
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+
+            const sender = document.createElement('b');
+            sender.textContent = msg.from === currentUserId ? 'Sen' : currentUserData.username;
+            msgDiv.appendChild(sender);
+
+            const time = msg.timestamp ? msg.timestamp.toDate().toLocaleString() : '';
+            const timeSpan = document.createElement('small');
+            timeSpan.style.marginLeft = '10px';
+            timeSpan.style.color = '#0ff7';
+            timeSpan.textContent = time;
+            msgDiv.appendChild(timeSpan);
+
+            if(msg.text){
+              const p = document.createElement('p');
+              p.textContent = msg.text;
+              msgDiv.appendChild(p);
+            }
+
+            chatArea.appendChild(msgDiv);
+          }
+        });
+        chatArea.scrollTop = chatArea.scrollHeight;
+      });
+  }
+
+  // Mesaj gönderme
+  sendMsgBtn.onclick = () => {
+    const text = noteInput.value.trim();
+    if(!text){
+      alert('Lütfen mesaj yazın.');
+      return;
     }
+    if(!currentChatFriendUid){
+      alert('Lütfen mesajlaşmak için bir arkadaş seçin.');
+      return;
+    }
+    db.collection('messages').add({
+      from: currentUserId,
+      to: currentChatFriendUid,
+      participants: [currentUserId, currentChatFriendUid],
+      text: text,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      noteInput.value = '';
+    }).catch(e => alert('Mesaj gönderilirken hata: ' + e.message));
+  };
 
-    registerBtn.onclick = () => {
-      const username = usernameInput.value.trim().toLowerCase();
-      const email = emailInput.value.trim().toLowerCase();
-      const password = passwordInput.value;
-
-      if (!username || !email || !password) {
-        alert('Lütfen tüm alanları doldurun!');
-        return;
-      }
-
-      if (password.length < 6) {
-        alert('Şifre en az 6 karakter olmalı!');
-        return;
-      }
-
-      const users = getUsers();
-
-      if (users[username]) {
-        alert('Bu kullanıcı adı zaten kayıtlı!');
-        return;
-      }
-
-      users[username] = {
-        email,
-        password,
-        friends: []
-      };
-      saveUsers(users);
-
-      alert('Kayıt başarılı! Giriş yapabilirsiniz.');
-
-      const rememberMe = rememberMeCheckbox.checked;
-      setLoggedInUser({ username, email, rememberMe });
-      showChat({ username, email, rememberMe });
-    };
-
-    loginBtn.onclick = () => {
-      const username = usernameInput.value.trim().toLowerCase();
-      const password = passwordInput.value;
-
-      if (!username || !password) {
-        alert('Lütfen kullanıcı adı ve şifre girin!');
-        return;
-      }
-
-      const users = getUsers();
-      const user = users[username];
-      if (!user) {
-        alert('Böyle bir kullanıcı bulunamadı!');
-        return;
-      }
-      if (user.password !== password) {
-        alert('Şifre yanlış!');
-        return;
-      }
-
-      const rememberMe = rememberMeCheckbox.checked;
-      setLoggedInUser({ username, email: user.email, rememberMe });
-      showChat({ username, email: user.email, rememberMe });
-    };
-
-    logoutBtn.onclick = () => {
-      setLoggedInUser(null);
+  // Çıkış yap
+  logoutBtn.onclick = () => {
+    auth.signOut().then(() => {
       showLogin();
-    };
+    });
+  };
 
-    addFriendBtn.onclick = () => {
-      const friendUsername = friendUsernameInput.value.trim().toLowerCase();
-      if(!friendUsername) {
-        alert('Lütfen bir kullanıcı adı yazın.');
-        return;
-      }
-
-      const loggedInUser = getLoggedInUser();
-      if(!loggedInUser) {
-        alert('Lütfen önce giriş yapın!');
-        showLogin();
-        return;
-      }
-
-      if(friendUsername === loggedInUser.username) {
-        alert('Kendinizi arkadaş olarak ekleyemezsiniz.');
-        return;
-      }
-
-      const users = getUsers();
-      if(!users[friendUsername]) {
-        alert('Böyle bir kullanıcı yok.');
-        return;
-      }
-
-      if(!users[loggedInUser.username].friends.includes(friendUsername)) {
-        users[loggedInUser.username].friends.push(friendUsername);
-      }
-      if(!users[friendUsername].friends.includes(loggedInUser.username)) {
-        users[friendUsername].friends.push(loggedInUser.username);
-      }
-      saveUsers(users);
-
-      alert(friendUsername + ' arkadaş olarak eklendi.');
-      renderFriends(loggedInUser);
-      friendUsernameInput.value = '';
-    };
-
-    function renderFriends(user) {
-      const users = getUsers();
-      const userData = users[user.username];
-      if(!userData || !userData.friends) {
-        friendsListDiv.innerHTML = '<i>Arkadaşınız yok.</i>';
-        return;
-      }
-      friendsListDiv.innerHTML = '';
-      userData.friends.forEach(friend => {
-        const div = document.createElement('div');
-        div.textContent = friend;
-        div.onclick = () => {
-          renderMessages(user.username, friend);
-        };
-        friendsListDiv.appendChild(div);
-      });
+  // Sayfa yüklendiğinde oturum kontrolü
+  auth.onAuthStateChanged(user => {
+    if(user){
+      loadUserData(user.uid);
+    } else {
+      showLogin();
     }
-
-    let currentChatFriend = null;
-
-    function renderMessages(myUsername, friendUsername) {
-      currentChatFriend = friendUsername;
-      chatArea.innerHTML = '';
-      if(!friendUsername) {
-        chatArea.innerHTML = '<i>Bir arkadaş seçin ya da mesaj gönderin.</i>';
-        return;
-      }
-      const messages = getMessages();
-      const filtered = messages.filter(m =>
-        (m.from === myUsername && m.to === friendUsername) ||
-        (m.from === friendUsername && m.to === myUsername)
-      );
-
-      filtered.sort((a,b) => a.timestamp - b.timestamp);
-
-      filtered.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = 'message';
-        div.innerHTML = `<b>${msg.from}:</b> ${msg.note || ''}`;
-        if(msg.photoDataUrl){
-          const img = document.createElement('img');
-          img.src = msg.photoDataUrl;
-          div.appendChild(img);
-        }
-        chatArea.appendChild(div);
-      });
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }
-
-    sendMsgBtn.onclick = () => {
-      const loggedInUser = getLoggedInUser();
-      if(!loggedInUser) {
-        alert('Lütfen önce giriş yapın!');
-        showLogin();
-        return;
-      }
-      if(!currentChatFriend) {
-        alert('Lütfen mesaj göndermek için bir arkadaş seçin.');
-        return;
-      }
-
-      const note = noteInput.value.trim();
-      const photoFile = photoInput.files[0];
-
-      if(!note && !photoFile) {
-        alert('En az bir not veya fotoğraf eklemelisiniz.');
-        return;
-      }
-
-      if(photoFile){
-        const reader = new FileReader();
-        reader.onload = function(e){
-          const photoDataUrl = e.target.result;
-          saveMessage(loggedInUser.username, currentChatFriend, note, photoDataUrl);
-          noteInput.value = '';
-          photoInput.value = '';
-          renderMessages(loggedInUser.username, currentChatFriend);
-        };
-        reader.readAsDataURL(photoFile);
-      } else {
-        saveMessage(loggedInUser.username, currentChatFriend, note, null);
-        noteInput.value = '';
-        renderMessages(loggedInUser.username, currentChatFriend);
-      }
-    };
-
-    function saveMessage(from, to, note, photoDataUrl){
-      const messages = getMessages();
-      messages.push({
-        from,
-        to,
-        note,
-        photoDataUrl,
-        timestamp: Date.now()
-      });
-      saveMessages(messages);
-    }
-
-    // Sayfa yüklendiğinde otomatik giriş yap veya login göster
-    autoLogin();
-
-  })();
+  });
 </script>
 
 </body>
