@@ -27,7 +27,8 @@
       text-align: center;
     }
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+    input[type="text"] {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -84,6 +85,46 @@
       user-select: none;
       text-decoration: underline;
     }
+    /* Arkadaşlar paneli stili */
+    #friends-panel {
+      display: none;
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      width: 300px;
+      height: 400px;
+      background: #222;
+      color: white;
+      border-radius: 10px;
+      padding: 15px;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    #friends-panel h3 {
+      margin-top: 0;
+    }
+    #friends-list div {
+      padding: 8px;
+      border-bottom: 1px solid #444;
+    }
+    #friends-list div.online {
+      color: #0f0;
+    }
+    #friends-list div.offline {
+      color: #888;
+    }
+    #show-friends {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      padding: 10px 15px;
+      background: #ff1493;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
   </style>
 </head>
 <body>
@@ -100,6 +141,24 @@
     <button class="switch-btn" id="switch-btn">Kayıt Ol</button>
     <div class="forgot-link" id="forgot-pass">Şifreni mi unuttun? Değiştir</div>
   </div>
+
+  <!-- Arkadaşlar paneli -->
+  <div id="friends-panel">
+    <button id="close-friends" style="float:right; background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button>
+    <h3>Arkadaşlar</h3>
+    <div id="friends-list">
+      <!-- Arkadaşlar listesi buraya -->
+    </div>
+    <hr style="margin:10px 0; border-color: #555;">
+    <form id="add-friend-form">
+      <input type="text" id="friend-username" placeholder="Arkadaş kullanıcı adı" required style="width: 70%; padding: 5px;" />
+      <button type="submit" style="padding: 5px 10px;">Ekle</button>
+    </form>
+    <p id="friend-error" style="color: #f44336; margin-top: 10px; display:none;"></p>
+  </div>
+
+  <!-- Arkadaşlar butonu -->
+  <button id="show-friends">Arkadaşlar</button>
 
   <script>
     const formContainer = document.getElementById('form-container');
@@ -145,7 +204,7 @@
 
     // Şifre değiştirme sayfasına yönlendir
     forgotPass.onclick = () => {
-      window.location.href = 'sifre-degistir.html';
+      window.location.href = 'sifre-degistirme.html';
     };
 
     submitBtn.onclick = () => {
@@ -183,7 +242,7 @@
         }
 
         alert('Giriş başarılı!');
-        window.location.href = 'anasayfa.html';
+        window.location.href = 'index.html';
 
       } else {
         // Kayıt işlemi
@@ -192,7 +251,6 @@
           return;
         }
 
-        // Basit doğrulama, şifre en az 6 karakter olabilir mesela
         if (password.length < 6) {
           alert('Şifre en az 6 karakter olmalı!');
           return;
@@ -203,101 +261,85 @@
         localStorage.setItem(email, JSON.stringify(newUser));
 
         alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
-        // Kayıt sonrası otomatik giriş için aşağıdaki satır aktif edilebilir:
-        // sessionStorage.setItem('loggedInUser', email);
-        // window.location.href = 'anasayfa.html';
 
         // Formu girişe döndür
         switchBtn.click();
       }
     };
+
+    // Arkadaşlar paneli kontrolü
     const showFriendsBtn = document.getElementById('show-friends');
-const friendsPanel = document.getElementById('friends-panel');
-const closeFriendsBtn = document.getElementById('close-friends');
-const addFriendForm = document.getElementById('add-friend-form');
-const friendUsernameInput = document.getElementById('friend-username');
-const friendError = document.getElementById('friend-error');
-const friendsListDiv = document.getElementById('friends-list');
+    const friendsPanel = document.getElementById('friends-panel');
+    const closeFriendsBtn = document.getElementById('close-friends');
+    const addFriendForm = document.getElementById('add-friend-form');
+    const friendUsernameInput = document.getElementById('friend-username');
+    const friendError = document.getElementById('friend-error');
+    const friendsListDiv = document.getElementById('friends-list');
 
-// Simüle edilmiş kayıtlı kullanıcılar listesi (örnek)
-const registeredUsers = ['toprak', 'dora', 'ali', 'ayse'];
+    // Simüle edilmiş kayıtlı kullanıcılar listesi (örnek)
+    const registeredUsers = ['toprak', 'dora', 'ali', 'ayse'];
 
-// Mevcut arkadaşlar listesi (localStorage'dan alınabilir)
-let friends = JSON.parse(localStorage.getItem('friends') || '[]');
+    // Mevcut arkadaşlar listesi (localStorage'dan alınabilir)
+    let friends = JSON.parse(localStorage.getItem('friends') || '[]');
 
-// Arkadaşlar panelini açma
-showFriendsBtn.addEventListener('click', () => {
-  friendsPanel.style.display = 'block';
-  friendError.style.display = 'none';
-  renderFriends();
-});
+    // Arkadaşlar panelini açma
+    showFriendsBtn.addEventListener('click', () => {
+      friendsPanel.style.display = 'block';
+      friendError.style.display = 'none';
+      renderFriends();
+    });
 
-// Arkadaşlar panelini kapatma
-closeFriendsBtn.addEventListener('click', () => {
-  friendsPanel.style.display = 'none';
-  friendError.style.display = 'none';
-});
+    // Arkadaşlar panelini kapatma
+    closeFriendsBtn.addEventListener('click', () => {
+      friendsPanel.style.display = 'none';
+      friendError.style.display = 'none';
+    });
 
-// Arkadaş ekleme işlemi
-addFriendForm.addEventListener('submit', e => {
-  e.preventDefault();
-  friendError.style.display = 'none';
-  const newFriend = friendUsernameInput.value.trim().toLowerCase();
+    // Arkadaş ekleme işlemi
+    addFriendForm.addEventListener('submit', e => {
+      e.preventDefault();
+      friendError.style.display = 'none';
+      const newFriend = friendUsernameInput.value.trim().toLowerCase();
 
-  if (!registeredUsers.includes(newFriend)) {
-    friendError.textContent = 'Kullanıcı bulunamadı.';
-    friendError.style.display = 'block';
-    return;
-  }
+      if (!registeredUsers.includes(newFriend)) {
+        friendError.textContent = 'Kullanıcı bulunamadı.';
+        friendError.style.display = 'block';
+        return;
+      }
 
-  if (friends.includes(newFriend)) {
-    friendError.textContent = 'Bu kullanıcı zaten arkadaş listende.';
-    friendError.style.display = 'block';
-    return;
-  }
+      if (friends.includes(newFriend)) {
+        friendError.textContent = 'Bu kullanıcı zaten arkadaş listende.';
+        friendError.style.display = 'block';
+        return;
+      }
 
-  friends.push(newFriend);
-  localStorage.setItem('friends', JSON.stringify(friends));
-  friendUsernameInput.value = '';
-  renderFriends();
-});
+      friends.push(newFriend);
+      localStorage.setItem('friends', JSON.stringify(friends));
+      friendUsernameInput.value = '';
+      renderFriends();
+    });
 
-// Arkadaşlar listesini ekrana yazdırma fonksiyonu
-function renderFriends() {
-  if (friends.length === 0) {
-    friendsListDiv.innerHTML = '<p>Henüz arkadaşınız yok.</p>';
-    return;
-  }
-  friendsListDiv.innerHTML = '';
-  friends.forEach(friend => {
-    const div = document.createElement('div');
-    div.textContent = friend + (Math.random() > 0.5 ? ' (Çevrimiçi)' : ' (Çevrimdışı)');
-    friendsListDiv.appendChild(div);
-  });
-}
+    // Arkadaşlar listesini ekrana yazdırma fonksiyonu
+    function renderFriends() {
+      if (friends.length === 0) {
+        friendsListDiv.innerHTML = '<p>Henüz arkadaşınız yok.</p>';
+        return;
+      }
+      friendsListDiv.innerHTML = '';
+      friends.forEach(friend => {
+        const div = document.createElement('div');
+        // Rastgele çevrimiçi durumu simülasyonu
+        const online = Math.random() > 0.5;
+        div.textContent = friend + (online ? ' (Çevrimiçi)' : ' (Çevrimdışı)');
+        div.className = online ? 'online' : 'offline';
+        friendsListDiv.appendChild(div);
+      });
+    }
 
-// İlk açılışta varsa arkadaşları göster
-renderFriends();
+    // İlk açılışta varsa arkadaşları göster
+    renderFriends();
+
   </script>
 
-<!-- Arkadaşlar paneli -->
-<div id="friends-panel" style="display:none; position: fixed; top: 50px; right: 20px; width: 300px; height: 400px; background: #222; color: white; border-radius: 10px; padding: 15px; z-index: 1000;">
-  <button id="close-friends" style="float:right; background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button>
-  <h3>Arkadaşlar</h3>
-  <div id="friends-list">
-    <!-- Arkadaşlar listesi burada olacak -->
-  </div>
-  <hr style="margin:10px 0; border-color: #555;">
-  <form id="add-friend-form">
-    <input type="text" id="friend-username" placeholder="Arkadaş kullanıcı adı" required style="width: 70%; padding: 5px;">
-    <button type="submit" style="padding: 5px 10px;">Ekle</button>
-  </form>
-  <p id="friend-error" style="color: #f44336; margin-top: 10px; display:none;"></p>
-</div>
-
-<!-- Arkadaşlar butonu -->
-<button id="show-friends" style="position: fixed; top: 10px; right: 20px; padding: 10px 15px; background:#ff1493; color:white; border:none; border-radius: 5px; cursor:pointer; z-index:1001;">
-  Arkadaşlar
-</button>
 </body>
 </html>
