@@ -57,6 +57,26 @@
       color: #ff5e78;
       text-decoration: none;
     }
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDCnBMVNe3A9LPGbO_ZhExn5TKqWLz7WuU",
+    authDomain: "mesaj-f1916.firebaseapp.com",
+    projectId: "mesaj-f1916",
+    storageBucket: "mesaj-f1916.appspot.com",
+    messagingSenderId: "536452620539",
+    appId: "1:536452620539:web:82a98f87008cf0eef0505e",
+    measurementId: "G-5L4D051ES5"
+  };
+
+  // Firebase'i başlat
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
+
   </style>
 </head>
 <body>
