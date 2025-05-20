@@ -68,8 +68,29 @@
       filter: brightness(1.1);
     }
 
-    .photo-card .caption {
-      display: none;
+    /* Zoom efekti için yeni stil */
+    .photo-card.zoomed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1000;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      transform: none;
+    }
+
+    .photo-card.zoomed img {
+      height: auto;
+      max-height: 90vh;
+      max-width: 90vw;
+      object-fit: contain;
     }
 
     .heart {
@@ -103,28 +124,28 @@
   <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığıın göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal  oluyorum resmen. Şey deyler ya "yanlış trende ne kadar uzun süre geçirirsen,eve dönmek o kadar zor olur." Ben  yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkcası.Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu farketmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil farketmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğimde bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun.Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdim derdimi dinledin tavsiye verdin tabi ki bunların hiç birini karşılıksız bırakmayacağım seni çok seviyorum meleğim benim güzeller güzeli sevgilim umarım seninle büyüyüp seninle yaşlanırım,yaşlanırkende gençleşirim,hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin toprak</p>
 
   <div class="gallery">
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg">
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg">
+    </div>
+    <div class="photo-card">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg">
+    </div>
   </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg">
-  </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg">
-  </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg">
-  </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg">
-  </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg">
-  </div>
-  <div class="photo-card">
-    <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg">
-  </div>
-</div>
 
   <script>
     // Gelişmiş kalp animasyonu
@@ -160,12 +181,34 @@
       }
     });
 
-    // Fotoğraf büyütme
+    // Gelişmiş fotoğraf büyütme/küçültme
     document.querySelectorAll('.photo-card').forEach(card => {
       card.addEventListener('click', function() {
-        this.classList.toggle('zoomed');
-        document.body.style.overflow = this.classList.contains('zoomed') ? 'hidden' : '';
+        const isZoomed = this.classList.contains('zoomed');
+        
+        // Tüm zoom'ları kapat
+        document.querySelectorAll('.photo-card.zoomed').forEach(el => {
+          el.classList.remove('zoomed');
+        });
+        
+        // Eğer zaten zoomlu değilse, sadece bu karta zoom yap
+        if (!isZoomed) {
+          this.classList.add('zoomed');
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
       });
+    });
+
+    // ESC tuşuyla zoom'u kapat
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.photo-card.zoomed').forEach(el => {
+          el.classList.remove('zoomed');
+        });
+        document.body.style.overflow = '';
+      }
     });
   </script>
 </body>
