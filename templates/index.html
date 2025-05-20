@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ana</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sevgilime Özel</title>
   <style>
-    /* BASE STYLES (style.css compatible) */
-    body {
+    /* TEMEL STİLLER */
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+    
+    body {
       background-color: #121212;
       color: white;
-      font-family: "Lucida Console", "Courier New", monospace;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
       overflow-x: hidden;
+      min-height: 100vh;
+      padding-bottom: 50px;
     }
     
     h1 {
       text-align: center;
-      margin-top: 30px;
+      margin: 30px 0;
       color: #f37055;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 2.2rem;
     }
     
     p {
-      max-width: 900px;
-      margin: 40px auto;
+      max-width: 800px;
+      margin: 0 auto 30px;
       padding: 0 20px;
-      font-size: 18px;
-      line-height: 1.7;
       text-align: justify;
-      color: #f0f0f0;
     }
     
-    /* GALLERY STYLES (features.css compatible) */
+    /* GALERİ DÜZENİ */
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 15px;
-      padding: 15px;
+      padding: 0 15px;
       max-width: 800px;
       margin: 0 auto;
     }
@@ -46,14 +51,14 @@
       position: relative;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       aspect-ratio: 1/1;
       transition: all 0.3s ease;
     }
     
     .photo-card:hover {
       transform: scale(1.03);
-      box-shadow: 0 6px 12px rgba(255,255,255,0.1);
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
     }
     
     .photo-card img {
@@ -63,36 +68,45 @@
       display: block;
     }
     
-    /* HEART ANIMATION (additionals.css compatible) */
+    /* KALP ANİMASYONU */
     .heart {
       position: fixed;
-      pointer-events: none;
-      font-size: 20px;
+      font-size: 24px;
       color: #ff6b6b;
+      pointer-events: none;
       animation: float 4s linear forwards;
-      z-index: 999;
+      z-index: 1000;
+      user-select: none;
       opacity: 0;
     }
     
     @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      20% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-    }
-    
-    /* RESPONSIVE ADJUSTMENTS */
-    @media (min-width: 480px) {
-      .gallery {
-        grid-template-columns: repeat(2, minmax(150px, 1fr));
+      0% {
+        transform: translate(0, 110vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(calc(100vw * var(--random-x)), -10vh) rotate(720deg);
+        opacity: 0;
       }
     }
     
-    @media (min-width: 768px) {
+    /* MOBİL UYUMLULUK */
+    @media (max-width: 480px) {
       .gallery {
-        grid-template-columns: repeat(2, minmax(200px, 1fr));
-        gap: 20px;
-        padding: 20px;
+        gap: 10px;
+        padding: 0 10px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+        margin: 20px 0;
       }
     }
   </style>
@@ -101,58 +115,72 @@
 
   <h1>SELAM AŞKIM</h1>
   
-  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin...</p>
+  <p>Sevgilim Dora, bu mesajı sana olan sevgimi ifade etmek için hazırladım. Sen benim için çok özelsin...</p>
 
-  <!-- PHOTO GALLERY -->
+  <!-- FOTOĞRAF GALERİSİ -->
   <div class="gallery">
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg">
-    </div>
-    <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/93FF22FE-9F78-4E38-A4EF-087BEA8D16AA.jpeg">
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy">
     </div>
   </div>
 
-  <!-- HEART ANIMATION SCRIPT -->
+  <!-- KALP ANİMASYON SCRIPTİ -->
   <script>
-    // Heart creation function
+    // Kalp oluşturma fonksiyonu
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.innerHTML = '❤';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = (15 + Math.random() * 25) + 'px';
-      heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+      
+      // Rastgele pozisyon ve özellikler
+      const size = 15 + Math.random() * 25;
+      const x = Math.random();
+      
+      heart.style.setProperty('--random-x', x);
+      heart.style.left = `${x * 100}vw`;
+      heart.style.fontSize = `${size}px`;
+      heart.style.animationDuration = `${3 + Math.random() * 3}s`;
+      heart.style.animationDelay = `${Math.random() * 2}s`;
+      
       document.body.appendChild(heart);
       
-      // Remove heart after animation
-      setTimeout(() => heart.remove(), 4000);
+      // Animasyon bitince kalbi kaldır
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
     }
     
-    // Initialize hearts on load
-    document.addEventListener('DOMContentLoaded', () => {
-      // Create initial hearts
-      for(let i = 0; i < 15; i++) {
-        setTimeout(createHeart, i * 200);
+    // Sayfa yüklendiğinde kalpleri başlat
+    window.addEventListener('load', () => {
+      // İlk 15 kalp
+      for (let i = 0; i < 15; i++) {
+        setTimeout(createHeart, i * 300);
       }
       
-      // Continuous heart creation
+      // Sürekli kalp üretme
       setInterval(createHeart, 800);
+    });
+    
+    // Sayfa boyutu değiştiğinde kalpleri ayarla
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.heart').forEach(heart => {
+        heart.style.left = `${Math.random() * 100}vw`;
+      });
     });
   </script>
 </body>
