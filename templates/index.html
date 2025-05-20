@@ -18,8 +18,7 @@
       line-height: 1.6;
       overflow-x: hidden;
       min-height: 100vh;
-      padding-bottom: 70px;
-      position: relative;
+      padding-bottom: 50px;
     }
 
     h1 {
@@ -53,13 +52,12 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       aspect-ratio: 1/1;
       transition: all 0.3s ease;
-      cursor: pointer;
     }
 
     .photo-card:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 40px rgba(255, 105, 180, 0.9);
-      filter: brightness(1.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+      filter: brightness(1.15);
     }
 
     .photo-card img {
@@ -79,6 +77,8 @@
       user-select: none;
       text-shadow: 0 0 15px #ff69b4;
       opacity: 0;
+      left: calc(var(--start-x) * 100vw);
+      top: calc(var(--start-y) * 100vh);
     }
 
     @keyframes float {
@@ -94,47 +94,33 @@
         opacity: 1;
       }
       100% {
-        transform: translate(var(--move-x), var(--move-y)) rotate(720deg) scale(0.5);
+        transform: 
+          translate(calc(var(--move-x) * 100px), 
+                    calc(var(--move-y) * -100px)) 
+          rotate(720deg) 
+          scale(0.5);
         opacity: 0;
       }
     }
 
-    #playPauseBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #f37055;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 28px;
+    #music-control {
+      display: block;
+      margin: 30px auto;
+      background-color: #ff1493;
       color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(243, 112, 85, 0.7);
+      box-shadow: 0 0 15px #ff1493;
       transition: background-color 0.3s ease;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       user-select: none;
     }
 
-    #playPauseBtn:hover {
-      background-color: #ff5a3c;
-    }
-
-    #musicTitle {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      color: #f37055;
-      font-weight: bold;
-      font-size: 1rem;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-      user-select: none;
-      z-index: 1100;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    #music-control:hover {
+      background-color: #ff69b4;
+      box-shadow: 0 0 25px #ff69b4;
     }
 
     @media (max-width: 480px) {
@@ -152,15 +138,9 @@
         font-size: 22px;
       }
 
-      #playPauseBtn {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-      }
-
-      #musicTitle {
-        font-size: 0.9rem;
-        bottom: 75px;
+      #music-control {
+        font-size: 1rem;
+        padding: 10px 20px;
       }
     }
   </style>
@@ -169,81 +149,83 @@
 
   <h1>SELAM AŞKIM</h1>
 
-  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum...</p>
+  <p>Selam, Dora , Sen 16 yaşındasın ama 16 Temmuzda 17 olacaksin en sevdiğin yemek fırında tavuk patates ve yanında soğan seni çok seviyorum hayır bu mesajı bir bok yediğim için değil sana olan minnettarlığının göstergesi olsun diye yazıyorum seninle çıktığım bu yolda gerçekten korkmadan adım atabiliyor olmam seninde bana güvenip korkusuzca her dilediğini yapabilmen çok hoşuma gidiyor seni o kadar çok seviyorum ki kelimelerle aram iyi olmamasına rağmen seninle konuşurken bir Orhan Pamuk bir Namık Kemal oluyorum resmen. Şey derler ya "yanlış trende ne kadar uzun süre geçirirsen, eve dönmek o kadar zor olur." Ben yanlış trenlere daha önce bindim eve dönüşüm zor oldu ama bu sefer trene binmek yerine evimi seçtim. Verdiğim en doğru karar buydu açıkçası. Senileyken kendimi evimdeymişim gibi huzurlu sakin hissediyorum hatta yeri geliyor evimde bile hissedemediğim rahatlığı sakinliği senin yanındayken buluyorum şu güne kadar yaptığım hatalar için özür dilerim seni gerçekten çok ama çok seviyorum her zaman benimle zor,kolay,neşeli,üzücü,sıkıcı,eğlenceli, zaman mekan nasıl olduğu fark etmeksizin hep benimle olduğun için teşekkür ederim seni gerçekten çok seviyorum duygularımı aktarmanın yolunu sen öğrettin bana yazmamı söyledin sana hissettiklerimin kelimeye dökemeyecek kadar çok olduğunu bilmeni istiyorum türkçe bir yere kadar yardımcı oluyor ki başka bir dilin bile yardımı dokunacağını düşünmüyorum çünkü sana olan aşkım sadece "seni seviyorum" demek değil basit kalır,dil fark etmeksizin tarife etmesi imkansız bir sevgi bu biraz cringe gelmiş olabilir ama içimdekileri dökmekten asla çekinmiyorum çekinmeyeceğim de bana bir sürü yeni arkadaşlık kurmamda yardımcı oldun. Sen benim en yakınım oldun, yeri geldiğinde sesim oldun yeri geldiğinde gülüşüm yeri geldiğinde kılavuzum oldun. Bana gerçekten bu hayatta lazım olan tek şeysin öyle de olmaya devam edecek. Bana o karanlık zamanlarımda ışık oldun bir melek gibi yol gösterdin, derdimi dinledin tavsiye verdin tabi ki bunların hiçbirini karşılıksız bırakmayacağım. Seni çok seviyorum meleğim, benim güzeller güzeli sevgilim. Umarım seninle büyüyüp seninle yaşlanırım, yaşlanırken de gençleşirim, hayatımı yaşamış bitirmiş olurum. Sevgilerle sevgilin Toprak</p>
 
   <div class="gallery">
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy" alt="Fotoğraf 1" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1201.jpg" loading="lazy" alt="Fotoğraf 1">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy" alt="Fotoğraf 2" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1225.jpeg" loading="lazy" alt="Fotoğraf 2">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy" alt="Fotoğraf 3" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1325.jpeg" loading="lazy" alt="Fotoğraf 3">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy" alt="Fotoğraf 4" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1849.jpeg" loading="lazy" alt="Fotoğraf 4">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy" alt="Fotoğraf 5" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1924.jpeg" loading="lazy" alt="Fotoğraf 5">
     </div>
     <div class="photo-card">
-      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy" alt="Fotoğraf 6" />
+      <img src="https://raw.githubusercontent.com/tpcggwq/mesaj/main/static/IMG_1928.jpeg" loading="lazy" alt="Fotoğraf 6">
     </div>
   </div>
 
-  <button id="playPauseBtn" aria-label="Müziği Oynat/Durdur">▶️</button>
-  <div id="musicTitle">Baby I'm Yours</div>
-  <audio id="music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2023/03/31/audio_004a8fa435.mp3?filename=baby-im-yours-123737.mp3" type="audio/mpeg" />
-    Tarayıcınız audio elementini desteklemiyor.
-  </audio>
+  <button id="music-control">Müziği Çal</button>
+  <audio id="audio" src="https://cdn.ncs.io/ncs-music/GoodbyeMyLove.mp3" preload="auto"></audio>
 
   <script>
-    // Müzik oynat/durdur
-    const music = document.getElementById('music');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-
-    playPauseBtn.addEventListener('click', () => {
-      if (music.paused) {
-        music.play();
-        playPauseBtn.textContent = '⏸️';
-      } else {
-        music.pause();
-        playPauseBtn.textContent = '▶️';
-      }
-    });
-
-    // Kalp oluşturma fonksiyonu
     function createHeart() {
       const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.textContent = '❤';
+      heart.className = 'heart';
+      heart.innerHTML = '❤';
 
-      // Başlangıç konumu ekran içinde rastgele
-      const startX = Math.random() * window.innerWidth;
-      const startY = Math.random() * window.innerHeight;
+      const size = 20 + Math.random() * 30;
+      const color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
 
-      heart.style.left = startX + 'px';
-      heart.style.top = startY + 'px';
+      const moveX = (Math.random() * 2 - 1).toFixed(2);
+      const moveY = (Math.random() * 1 + 0.5).toFixed(2);
 
-      // Animasyon için rastgele hareket (x, y) değerleri, px cinsinden
-      const moveX = (Math.random() * 200 - 100) + 'px'; // -100 ile +100 px arası
-      const moveY = (- (Math.random() * 300 + 150)) + 'px'; // yukarı doğru -150 ile -450 px arası
+      const startX = Math.random();
+      const startY = Math.random();
 
+      heart.style.setProperty('--start-x', startX);
+      heart.style.setProperty('--start-y', startY);
       heart.style.setProperty('--move-x', moveX);
       heart.style.setProperty('--move-y', moveY);
 
+      heart.style.fontSize = `${size}px`;
+      heart.style.color = color;
+      heart.style.textShadow = `0 0 15px ${color}`;
+      heart.style.animationDuration = `${3 + Math.random() * 3}s`;
+      heart.style.animationDelay = `${Math.random() * 2}s`;
+
       document.body.appendChild(heart);
 
-      // Animasyon tamamlanınca kalbi kaldır
-      heart.addEventListener('animationend', () => {
-        heart.remove();
-      });
+      setTimeout(() => heart.remove(), 5000);
     }
 
-    // Her 300ms'de bir kalp oluştur
-    setInterval(createHeart, 300);
+    window.addEventListener('load', () => {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createHeart, i * 200);
+      }
+      setInterval(createHeart, 1000);
+    });
+
+    const musicControl = document.getElementById('music-control');
+    const audio = document.getElementById('audio');
+
+    musicControl.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        musicControl.textContent = 'Müziği Durdur';
+      } else {
+        audio.pause();
+        musicControl.textContent = 'Müziği Çal';
+      }
+    });
   </script>
+
 </body>
 </html>
