@@ -161,17 +161,12 @@
 
 <!-- Aşağıya bu script'i EKLE (mevcut scriptlerin sonuna ekleyebilirsin) -->
 <script>
-  window.onload = () => {
-    const user = localStorage.getItem("currentUser");
-    if (user) {
-      document.getElementById("auth-screen").style.display = "none";
-    } else {
-      document.getElementById("auth-screen").style.display = "flex";
-      // tüm içeriği geçici olarak gizle
-      document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "none");
-    }
-  };
-
+ window.onload = () => {
+  // Her zaman giriş ekranı gösterilecek
+  document.getElementById("auth-screen").style.display = "flex";
+  // Diğer her şey gizlenecek
+  document.body.querySelectorAll("body > *:not(#auth-screen)").forEach(el => el.style.display = "none");
+};
   function showMainContent(username) {
     localStorage.setItem("currentUser", username);
     document.getElementById("auth-screen").style.display = "none";
