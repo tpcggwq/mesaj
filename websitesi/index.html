@@ -2,26 +2,40 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Giriş</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sevgilim İçin 💖</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-page">
-  <div class="login-container">
-    <h2>💖 Sevgilim İçin 💖</h2>
-    <input type="password" id="password" placeholder="Parola">
+<body>
+  <div id="password-screen">
+    <h1>💌 Giriş</h1>
+    <input type="password" id="password" placeholder="Parolayı Gir">
     <button onclick="checkPassword()">Giriş Yap</button>
-    <p id="error"></p>
   </div>
 
-  <script>
-    function checkPassword() {
-      const input = document.getElementById("password").value;
-      if (input === "askim") {
-        window.location.href = "home.html";
-      } else {
-        document.getElementById("error").innerText = "Yanlış parola 🥺";
-      }
-    }
-  </script>
+  <div id="main-content" style="display: none;">
+    <audio id="music" src="muzik.mp3"></audio>
+    <button id="playMusic">🎵 Müziği Aç</button>
+
+    <div class="page" id="page1">
+      <div class="photo-container">
+        <img src="foto1.jpg" alt="Fotoğraf 1" class="photo">
+        <div class="heart-bg"></div>
+      </div>
+      <p class="typewriter-text" id="text1"></p>
+      <button onclick="nextPage(2)">➡ Devam</button>
+    </div>
+
+    <div class="page" id="page2" style="display: none;">
+      <div class="photo-container">
+        <img src="foto2.jpg" alt="Fotoğraf 2" class="photo">
+        <div class="heart-bg"></div>
+      </div>
+      <p class="typewriter-text" id="text2"></p>
+      <button onclick="nextPage(1)">⬅ Geri</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
